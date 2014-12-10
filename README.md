@@ -1,4 +1,4 @@
-# express-recaptcha [![Build Status][ci-image]][ci-url]
+# express-recaptcha [![Build Status][ci-image]][ci-url] [![npm version][npm-version-image]][npm-version-url]
 
 Google recaptcha for expressjs.
 
@@ -40,3 +40,5 @@ app.post('/', function(req, res){
 
 [ci-image]: https://travis-ci.org/pdupavillon/express-recaptcha.svg?branch=master
 [ci-url]: https://travis-ci.org/pdupavillon/express-recaptcha
+[npm-version-image]: https://badge.fury.io/js/express-recaptcha.svg
+[npm-version-url]: http://badge.fury.io/js/express-recaptcha
