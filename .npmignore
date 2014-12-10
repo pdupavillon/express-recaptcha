@@ -2,3 +2,5 @@ package.json
 README.*
 test.js
 mocha.opts
+node_modules
+.gitignore

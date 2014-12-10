@@ -1,5 +1,8 @@
 language: node_js
 node_js:
-  - "0.10"
-script:
-  npm test
+- '0.10'
+deploy:
+  provider: npm
+  email: p.dupavillon@gmail.com
+  api_key:
+    secure: NKNWR6P5OoF5l5P7l0DmM3qPgon+iX5ADSlkrnjl6hkNpSci2ShJe6PmnCm/p2VFND1hNLWS5iDvTvBD75azIH/S21d9DYxgkonOaYVG04CfjfLhslQDM36tGbrvI3qyiJXd5NEhsYdG7udtAokzRnphwyWmU63yq9wdjY6PxRo=
