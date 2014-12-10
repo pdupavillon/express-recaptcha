@@ -1,0 +1,36 @@
+{
+  "name": "express-recaptcha",
+  "version": "0.0.0",
+  "description": "Implementation of google recaptcha solution in express",
+  "main": "./lib/express-recaptcha.js",
+  "directories": {
+    "test": "test"
+  },
+  "scripts": {
+    "test": "mocha"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/pdupavillon/express-recaptcha.git"
+  },
+  "keywords": [
+    "express",
+    "javascript",
+    "nodejs",
+    "recaptcha",
+    "google",
+    "captcha",
+    "jade"
+  ],
+  "author": "Paul du Pavillon",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/pdupavillon/express-recaptcha/issues"
+  },
+  "homepage": "https://github.com/pdupavillon/express-recaptcha",
+  "devDependencies": {
+    "mocha": "~2.0.1",
+    "should": "~4.3.1",
+    "sinon": "~1.12.1"
+  }
+}

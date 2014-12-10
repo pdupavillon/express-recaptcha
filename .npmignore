@@ -1,0 +1,4 @@
+package.json
+README.*
+test.js
+mocha.opts

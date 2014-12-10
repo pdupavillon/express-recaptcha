@@ -1,0 +1,4 @@
+-u bdd
+-R spec
+--recursive
+--check-leaks
