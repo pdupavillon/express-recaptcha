@@ -62,7 +62,7 @@ describe('Recaptcha', function() {
         callback:'callback'
       });
       var result = recaptcha.render();
-      var expected = '<script src="//'+api_url+'&onload=cb&render=explicit&hl=fr" async defer></script>'+
+      var expected = '<script src="//'+api_url+'?onload=cb&render=explicit&hl=fr" async defer></script>'+
       '<div class="g-recaptcha" data-sitekey="SITE_KEY" data-theme="dark" data-type="audio" data-callback="callback"></div>';
       result.should.be.equal(expected);
     });
