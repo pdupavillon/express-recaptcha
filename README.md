@@ -4,6 +4,8 @@ Google recaptcha middleware for express.
 
 Link : https://www.google.com/recaptcha
 
+<img src="https://www.google.com/recaptcha/intro/images/hero-recaptcha-demo.gif" width="300px" />
+
 ## installation
 ```shell
 npm install express-recaptcha --save
