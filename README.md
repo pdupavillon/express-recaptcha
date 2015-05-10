@@ -37,8 +37,7 @@ middleware render method set the `recaptcha` property of `req` object, with the 
 middleware Verify method set the `recaptcha` property of `req` object, with validation informations.
 ```javascript
 {
-    success: bool, //could be true or false
-    error: string //error code (see below)
+    error: string //error code (see below), null if success
 }
 ```
 
@@ -68,7 +67,7 @@ app.get('/', recaptcha.middleware.render, function(req, res){
 });
 
 app.post('/', recaptcha.middleware.verify, function(req, res){
-    if (req.recaptcha.success)
+    if (!req.recaptcha.error)
         // success code
     else
         // error code
@@ -92,8 +91,8 @@ app.get('/', function(req, res){
 });
 
 app.post('/', function(req, res){
-    recaptcha.verify(req, function(success,error){
-        if(success)
+    recaptcha.verify(req, function(error){
+        if(!error)
             //success code
         else
             //error code

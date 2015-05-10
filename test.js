@@ -79,8 +79,8 @@ describe('Recaptcha', function() {
         });
       });
 
-      recaptcha.verify({body:{'g-recaptcha-response':'1234578910'}},function(success,error){
-        success.should.be.true;
+      recaptcha.verify({body:{'g-recaptcha-response':'1234578910'}},function(error){
+        (error === null).should.be.true;
         done();
       });
     });
@@ -96,8 +96,7 @@ describe('Recaptcha', function() {
         });
       });
 
-      recaptcha.verify({body:{'g-recaptcha-response':'1234578910'}},function(success,error){
-        success.should.be.false;
+      recaptcha.verify({body:{'g-recaptcha-response':'1234578910'}},function(error){
         error.should.be.equal("invalid-input-response");
         done();
       });
@@ -128,8 +127,7 @@ describe('Recaptcha', function() {
 
       recaptcha.middleware.verify(req,{}, function(){
         req.recaptcha.should.be.ok;
-        req.recaptcha.success.should.be.true;
-        (req.recaptcha.error == undefined).should.be.true;
+        (req.recaptcha.error === null).should.be.true;
         done();
       });
     });
@@ -148,7 +146,6 @@ describe('Recaptcha', function() {
 
       recaptcha.middleware.verify(req,{}, function(){
         req.recaptcha.should.be.ok;
-        req.recaptcha.success.should.be.false;
         req.recaptcha.error.should.be.equal('invalid-input-response');
         done();
       });

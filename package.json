@@ -1,6 +1,6 @@
 {
   "name": "express-recaptcha",
-  "version": "1.0.2",
+  "version": "2.0.0",
   "description": "Google recaptcha middleware for express",
   "main": "./lib/express-recaptcha.js",
   "scripts": {

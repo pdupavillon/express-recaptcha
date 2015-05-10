@@ -5,4 +5,4 @@ deploy:
   provider: npm
   email: p.dupavillon@gmail.com
   api_key:
-    secure: NKNWR6P5OoF5l5P7l0DmM3qPgon+iX5ADSlkrnjl6hkNpSci2ShJe6PmnCm/p2VFND1hNLWS5iDvTvBD75azIH/S21d9DYxgkonOaYVG04CfjfLhslQDM36tGbrvI3qyiJXd5NEhsYdG7udtAokzRnphwyWmU63yq9wdjY6PxRo=
+    secure: oxkkFKnO9VLAte7QfgDW62T9+26ATDqwx2OR54/kkhKDWCx9xP1aczon+Sv+jqChKa05JFgd5NnA9xtAhfmvC6V+Nn0afMz3DxmdwMKDoCPWU9+wfgymcFxh5kJBIXJ1sWLE4GC5bRynpTKBD5csJS1w4ZBBndRdU4YVEKu7FaI=
