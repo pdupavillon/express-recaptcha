@@ -6,14 +6,14 @@ var https = require('https');
 
 describe('Recaptcha', function() {
   beforeEach(function() {
-    if (https.get.restore) https.get.restore();
+    if (https.request.restore) https.request.restore();
   });
 
   it('Init', function() {
     recaptcha.init('SITE_KEY','SECRET_KEY');
     recaptcha.should.be.ok;
-    recaptcha.site_key.should.be.ok.and.be.equal('SITE_KEY');
-    recaptcha.secret_key.should.be.ok.and.be.equal('SECRET_KEY');
+    recaptcha.site_key.should.be.ok().and.be.equal('SITE_KEY');
+    recaptcha.secret_key.should.be.ok().and.be.equal('SECRET_KEY');
   });
 
   it('Init with options', function() {
@@ -23,11 +23,14 @@ describe('Recaptcha', function() {
       hl:'fr',
       theme:'dark',
       type:'audio',
-      callback:'callback'
+      callback:'callback',
+      expired_callback:'expired_callback',
+      size:'size',
+      tabindex:'tabindex'
     });
     recaptcha.should.be.ok;
-    recaptcha.site_key.should.be.ok.and.be.equal('SITE_KEY');
-    recaptcha.secret_key.should.be.ok.and.be.equal('SECRET_KEY');
+    recaptcha.site_key.should.be.ok().and.be.equal('SITE_KEY');
+    recaptcha.secret_key.should.be.ok().and.be.equal('SECRET_KEY');
     recaptcha.options.should.be.ok;
     recaptcha.options.onload.should.be.equal('cb');
     recaptcha.options.render.should.be.equal('explicit');
@@ -35,6 +38,9 @@ describe('Recaptcha', function() {
     recaptcha.options.theme.should.be.equal('dark');
     recaptcha.options.type.should.be.equal('audio');
     recaptcha.options.callback.should.be.equal('callback');
+    recaptcha.options.expired_callback.should.be.equal('expired_callback');
+    recaptcha.options.size.should.be.equal('size');
+    recaptcha.options.tabindex.should.be.equal('tabindex');
   });
 
   it('Not init', function() {
@@ -59,24 +65,29 @@ describe('Recaptcha', function() {
         hl:'fr',
         theme:'dark',
         type:'audio',
-        callback:'callback'
+        callback:'callback',
+        expired_callback:'expired_callback',
+        size:'size',
+        tabindex:'tabindex'
       });
       var result = recaptcha.render();
       var expected = '<script src="//'+api_url+'?onload=cb&render=explicit&hl=fr" async defer></script>'+
-      '<div class="g-recaptcha" data-sitekey="SITE_KEY" data-theme="dark" data-type="audio" data-callback="callback"></div>';
+      '<div class="g-recaptcha" data-sitekey="SITE_KEY" data-theme="dark" data-type="audio" data-callback="callback" data-expired-callback="expired_callback" data-size="size" data-tabindex="tabindex"></div>';
       result.should.be.equal(expected);
     });
 
 
     it('Verify', function(done){
       recaptcha.init('SITE_KEY','SECRET_KEY');
-      var httpStub = sinon.stub(https,'get',function(options,cb){
+      var httpsStub = sinon.stub(https,'request', function(options,cb){
         cb({
           on:function(evt,callback){
             if (evt == 'data') callback('{"success":true}');
             if (evt =='end') callback();
-          }
+          },
+          setEncoding:function(){}
         });
+        return {write:function(){}, end:function(){}};
       });
 
       recaptcha.verify({body:{'g-recaptcha-response':'1234578910'}},function(error){
@@ -87,13 +98,15 @@ describe('Recaptcha', function() {
 
     it('Verify with error', function(done){
       recaptcha.init('SITE_KEY','SECRET_KEY');
-      var httpStub = sinon.stub(https,'get',function(options,cb){
+      var httpStub = sinon.stub(https,'request',function(options,cb){
         cb({
           on:function(evt,callback){
             if (evt == 'data') callback('{"success":false, "error-codes": [ "invalid-input-response" ]}');
             if (evt =='end') callback();
-          }
+          },
+          setEncoding:function(){}
         });
+        return {write:function(){}, end:function(){}};
       });
 
       recaptcha.verify({body:{'g-recaptcha-response':'1234578910'}},function(error){
@@ -116,13 +129,15 @@ describe('Recaptcha', function() {
     it('Verify', function(done){
       recaptcha.init('SITE_KEY','SECRET_KEY');
       var req = {body:{'g-recaptcha-response':'1234578910'}};
-      var httpStub = sinon.stub(https,'get',function(options,cb){
+      var httpStub = sinon.stub(https,'request',function(options,cb){
         cb({
           on:function(evt,callback){
             if (evt == 'data') callback('{"success":true}');
             if (evt =='end') callback();
-          }
+          },
+          setEncoding:function(){}
         });
+        return {write:function(){}, end:function(){}};
       });
 
       recaptcha.middleware.verify(req,{}, function(){
@@ -135,13 +150,15 @@ describe('Recaptcha', function() {
     it('Verify with error', function(done){
       recaptcha.init('SITE_KEY','SECRET_KEY');
       var req = {body:{'g-recaptcha-response':'1234578910'}};
-      var httpStub = sinon.stub(https,'get',function(options,cb){
+      var httpStub = sinon.stub(https,'request',function(options,cb){
         cb({
           on:function(evt,callback){
             if (evt == 'data') callback('{"success":false, "error-codes": [ "invalid-input-response" ]}');
             if (evt =='end') callback();
-          }
+          },
+          setEncoding:function(){}
         });
+        return {write:function(){}, end:function(){}};
       });
 
       recaptcha.middleware.verify(req,{}, function(){

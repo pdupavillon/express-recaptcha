@@ -1,8 +1,8 @@
 language: node_js
 node_js:
-- '0.10'
+- '6'
 deploy:
   provider: npm
   email: p.dupavillon@gmail.com
   api_key:
-    secure: oxkkFKnO9VLAte7QfgDW62T9+26ATDqwx2OR54/kkhKDWCx9xP1aczon+Sv+jqChKa05JFgd5NnA9xtAhfmvC6V+Nn0afMz3DxmdwMKDoCPWU9+wfgymcFxh5kJBIXJ1sWLE4GC5bRynpTKBD5csJS1w4ZBBndRdU4YVEKu7FaI=
+    secure: KaAbs1dTDw7zferLfwthzbIQt5sepNcbde7ZVFZiWWO83kxSBPkl9dRRPojdaiNJpGEQCsFOfGvtN7rOyZUBMKBVRF5RSfmWgebOjuGD1LeNU73hX9dxjTqtI885VZ6tjYE5De0+5OxhoidQQIbOy2u9gjbOl38U5uOcQpiX+eM=

@@ -21,10 +21,13 @@ recaptcha.init('SITE_KEY', 'SECRET_KEY', options);
 `options` available properties
 * `onload` The callback function that gets called when all the dependencies have loaded.
 * `render` Value could be **explicit** OR **onload**, Whether to render the widget explicitly.
-* `hl` Forces the widget to render in a specific language.
-* `theme` Value could be **dark** OR **light**, The color theme of the widget (default light).
-* `type` Value could be **audio** OR **image**, The type of CAPTCHA to serve.
-* `callback` Your callback function that's executed when the user submits a successful CAPTCHA response.
+* `hl` (Optional). Forces the widget to render in a specific language (Auto-detects if unspecified).
+* `theme` (Optional). Value could be **dark** OR **light**, The color theme of the widget (default light).
+* `type` (Optional). Value could be **audio** OR **image**, The type of CAPTCHA to serve.
+* `callback` (Optional). Your callback function that's executed when the user submits a successful CAPTCHA response.
+* `expired_callback` (Optional).Your callback function that's executed when the recaptcha response expires and the user needs to solve a new CAPTCHA.
+* `size` (Optional). The size of the widget.
+* `tabindex` (Optional). The tabindex of the widget and challenge. If other elements in your page use tabindex, it should be set to make user navigation easier.
 
 
 For more explanations, please refer to the documentation
