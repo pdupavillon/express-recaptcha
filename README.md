@@ -99,7 +99,7 @@ app.post('/', function(req, res){
             //success code
         else
             //error code
-    }
+    });
 });
 ```
 [ci-image]: https://travis-ci.org/pdupavillon/express-recaptcha.svg?branch=master
