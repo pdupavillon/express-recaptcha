@@ -14,6 +14,7 @@ npm install express-recaptcha --save
 ### Init
 ```javascript
 var recaptcha = require('express-recaptcha');
+//...
 recaptcha.init('SITE_KEY', 'SECRET_KEY');
 //or
 recaptcha.init('SITE_KEY', 'SECRET_KEY', options);
@@ -55,11 +56,16 @@ middleware Verify method set the `recaptcha` property of `req` object, with vali
 ### Example
 ```javascript
 var express = require('express');
+var bodyParser = require('body-parser');
 var pub = __dirname + '/public';
 var app = express();
 var recaptcha = require('express-recaptcha');
 
 recaptcha.init('SITE_KEY', 'SECRET_KEY');
+
+//- required by express-recaptcha in order to get data from body or query.
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded());
 
 app.use(express.static(pub));
 app.set('views', __dirname + '/views');
@@ -79,11 +85,16 @@ app.post('/', recaptcha.middleware.verify, function(req, res){
 ### Example - without middleware
 ```javascript
 var express = require('express');
+var bodyParser = require('body-parser');
 var pub = __dirname + '/public';
 var app = express();
 var recaptcha = require('express-recaptcha');
 
 recaptcha.init('SITE_KEY', 'SECRET_KEY');
+
+//- required by express-recaptcha in order to get data from body or query.
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded());
 
 app.use(express.static(pub));
 app.set('views', __dirname + '/views');
