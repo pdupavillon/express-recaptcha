@@ -6,10 +6,18 @@ Link : https://www.google.com/recaptcha
 
 <img src="https://www.google.com/recaptcha/intro/images/hero-recaptcha-demo.gif" width="300px" />
 
-## installation
+## Installation
 ```shell
 npm install express-recaptcha --save
 ```
+## Requirements
+* Expressjs
+* BodyParser middleware - to get captcha data from query (usage depends on the version of expressjs you have)
+    ```javascript
+    app.use(bodyParser.json());
+    app.use(bodyParser.urlencoded());
+    ```
+
 ## Usage
 ### Init
 ```javascript
