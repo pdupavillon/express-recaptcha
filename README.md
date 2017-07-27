@@ -41,6 +41,7 @@ recaptcha.init('SITE_KEY', 'SECRET_KEY', options);
 * `expired_callback` (Optional).Your callback function that's executed when the recaptcha response expires and the user needs to solve a new CAPTCHA.
 * `size` (Optional). The size of the widget.
 * `tabindex` (Optional). The tabindex of the widget and challenge. If other elements in your page use tabindex, it should be set to make user navigation easier.
+* `checkremoteip` (Optional). Adding support of remoteip verification (based on x-forwarded-for header or remoteAddress.(https://developers.google.com/recaptcha/docs/verify)
 
 
 For more explanations, please refer to the documentation
