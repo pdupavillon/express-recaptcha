@@ -1,6 +1,7 @@
 language: node_js
 node_js:
 - '6'
+dist: trusty
 deploy:
   provider: npm
   email: p.dupavillon@gmail.com
