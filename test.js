@@ -7,7 +7,8 @@ var PassThrough = require('stream').PassThrough;
 
 class HttpTestHelper{
   constructor(){
-    this.httpBodyResponse = '{"success":true}';
+    this.testHost = 'www.test-host.com';
+    this.httpBodyResponse = '{"success":true, "hostname":"' + this.testHost + '"}';
   }
   withErrorCode(errorCode){
     this.httpBodyResponse = '{"success":false, "error-codes": [ "'+errorCode+'" ]}';
@@ -53,8 +54,13 @@ class RecaptchaWrapper{
     if (this.isMiddleware) {
       recaptcha.middleware.verify(req,{},function(){
         req.recaptcha.should.be.ok();
-        cb(req.recaptcha.error);
-      }); 
+
+        if (req.recaptcha.hasOwnProperty('hostname')) {
+          cb(req.recaptcha.error, {hostname: req.recaptcha.hostname});
+        } else {
+          cb(req.recaptcha.error);
+        }
+      });
     }
     else recaptcha.verify(req,cb);
   }
@@ -63,11 +69,11 @@ class RecaptchaWrapper{
 describe('Recaptcha', function() {
 
   beforeEach(function() {
-    this.httpTestHelper = new HttpTestHelper(); 
+    this.httpTestHelper = new HttpTestHelper();
   });
 	afterEach(function() {
     if (https.request.restore) https.request.restore();
-	});  
+	});
 
   it('Init', function() {
     recaptcha.init('SITE_KEY','SECRET_KEY');
@@ -136,8 +142,8 @@ describe('Recaptcha', function() {
 
   function Verify(done){
       this.httpTestHelper.build();
-      RecaptchaWrapper.Init(this.isMiddleware).verify({body:{'g-recaptcha-response':'1234578910'}}, function(error){
-        (error === null).should.be.true();
+      RecaptchaWrapper.Init(this.isMiddleware).verify({body:{'g-recaptcha-response':'1234578910'}}, function(error, result){
+        (result.hasOwnProperty('hostname') && result.hostname === this.httpTestHelper.testHost && error === null).should.be.true();
         this.httpTestHelper.checkValidationQueryString('secret=SECRET_KEY&response=1234578910');
         done();
       }.bind(this));
@@ -149,7 +155,7 @@ describe('Recaptcha', function() {
         error.should.be.equal("invalid-input-response");
         this.httpTestHelper.checkValidationQueryString('secret=SECRET_KEY&response=1234578910');
         done();
-      }.bind(this));    
+      }.bind(this));
   }
   function VerifyClientIpHeader(done){
       this.httpTestHelper.build();
@@ -158,11 +164,11 @@ describe('Recaptcha', function() {
         (error === null).should.be.true();
         this.httpTestHelper.checkValidationQueryString('secret=SECRET_KEY&response=1234578910&remoteip=10.0.0.1');
         done();
-      }.bind(this));    
+      }.bind(this));
   }
   function VerifyClientIpRemoteAddr(done){
       this.httpTestHelper.build();
-      
+
       RecaptchaWrapper.Init(this.isMiddleware, {checkremoteip: true}).verify({body:{'g-recaptcha-response':'1234578910'}, connection:{remoteAddress:'10.0.0.1'}}, function(error){
         (error === null).should.be.true();
         this.httpTestHelper.checkValidationQueryString('secret=SECRET_KEY&response=1234578910&remoteip=10.0.0.1');
@@ -172,7 +178,7 @@ describe('Recaptcha', function() {
 
   describe('Direct use', function() {
     beforeEach(function() {
-      this.isMiddleware = false; 
+      this.isMiddleware = false;
     });
     it('Render', Render.bind(this));
     it('Render with options', RenderWithOption.bind(this));
@@ -184,8 +190,8 @@ describe('Recaptcha', function() {
 
   describe('Middleware use', function() {
     beforeEach(function() {
-      this.isMiddleware = true; 
-    });    
+      this.isMiddleware = true;
+    });
     it('Render', Render.bind(this));
     it('Render with options', RenderWithOption.bind(this));
     it('Verify', function(done){ Verify.call(this, done); });
