@@ -54,9 +54,11 @@ middleware render method set the `recaptcha` property of `req` object, with the 
 middleware Verify method set the `recaptcha` property of `req` object, with validation informations.
 ```javascript
 {
-    error: string //error code (see below), null if success
+    error: string, //error code (see below), null if success
+    hostname: string //the hostname of the site where the reCAPTCHA was solved 
 }
 ```
+### List of possible error codes
 
 | Error code    | Description   |
 |:------------- |:-------------|
@@ -95,6 +97,18 @@ app.post('/', recaptcha.middleware.verify, function(req, res){
         // error code
 });
 ```
+
+### Verify - without middleware
+The verify callback takes 2 arguments : 
+
+* `error`: null|string (see list of possible error codes above)
+* `data`: object, with the following definition
+```javascript
+{
+    hostname: string //the hostname of the site where the reCAPTCHA was solved 
+}
+```
+
 ### Example - without middleware
 ```javascript
 var express = require('express');
@@ -118,7 +132,7 @@ app.get('/', function(req, res){
 });
 
 app.post('/', function(req, res){
-    recaptcha.verify(req, function(error){
+    recaptcha.verify(req, function(error, data){
         if(!error)
             //success code
         else
