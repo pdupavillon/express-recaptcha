@@ -15,15 +15,12 @@ export default class Recaptcha{
   get middleware() {
     return {
       render: (req, res, next) => {
-        req.recaptcha = this.render()
+        res.recaptcha = this.render()
         next()
       },
       verify: (req, res, next) => {
         this.verify(req, (error, data) => {
-          req.recaptcha = {error:error}
-          if (data){
-            req.recaptcha.hostname =  data.hostname
-          }
+          req.recaptcha = {error, data}
           next()
         })
       }

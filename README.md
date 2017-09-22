@@ -35,7 +35,7 @@ var recaptcha = new Recaptcha('SITE_KEY', 'SECRET_KEY', options);
 ```
 
 ```javascript
-//--- Old usage (express-recaptcha version <= 2.3)
+//--- Old usage (express-recaptcha version <= 2.3.0)
 var recaptcha = require('express-recaptcha');
 //...
 recaptcha.init('SITE_KEY', 'SECRET_KEY');
@@ -59,16 +59,19 @@ For more explanations, please refer to the documentation
 https://developers.google.com/recaptcha/docs/display#config
 
 ### Render
-middleware render method set the `recaptcha` property of `req` object, with the generated html code.
+middleware render method set the `recaptcha` property of `res` object (new in version >= 3.\*.*, was `req` previously), with the generated html code.
 
 ### Verify
 middleware Verify method set the `recaptcha` property of `req` object, with validation informations.
 ```javascript
 {
     error: string, //error code (see below), null if success
-    hostname: string //the hostname of the site where the reCAPTCHA was solved 
+    data: {
+        hostname: string //the hostname of the site where the reCAPTCHA was solved
+    } 
 }
 ```
+
 ### List of possible error codes
 
 | Error code    | Description   |
@@ -98,7 +101,7 @@ app.set('views', __dirname + '/views');
 app.set('view engine', 'jade');
 
 app.get('/', recaptcha.middleware.render, function(req, res){
-  res.render('login', { captcha:req.recaptcha });
+  res.render('login', { captcha:res.recaptcha });
 });
 
 app.post('/', recaptcha.middleware.verify, function(req, res){

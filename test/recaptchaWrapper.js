@@ -8,8 +8,8 @@ export default class RecaptchaWrapper{
     static Init(isMiddleware, opt){
       return new RecaptchaWrapper(isMiddleware, opt)
     }
-    render(req){
-      if (this._isMiddleware) { var req = {}; this._recaptcha.middleware.render(req,{},() => {}); return req.recaptcha}
+    render(){
+      if (this._isMiddleware) { var res = {}; this._recaptcha.middleware.render({}, res,() => {}); return res.recaptcha}
       return this._recaptcha.render()
     }
     verify(req, cb){
@@ -18,7 +18,7 @@ export default class RecaptchaWrapper{
           req.recaptcha.should.be.ok()
   
           if (req.recaptcha.error === null) {
-            cb(null, {hostname: req.recaptcha.hostname})
+            cb(null, req.recaptcha.data)
           } else {
             cb(req.recaptcha.error, null)
           }
