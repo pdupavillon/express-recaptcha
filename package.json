@@ -2,9 +2,11 @@
   "name": "express-recaptcha",
   "version": "2.3.0",
   "description": "Google recaptcha middleware for express",
-  "main": "./lib/express-recaptcha.js",
+  "main": "./dist/express-recaptcha.js",
   "scripts": {
-    "test": "mocha"
+    "build": "babel src --out-dir dist",
+    "dev": "mocha --require babel-register --compilers js:babel-core/register ./test/index.js --watch",
+    "test": "mocha --require babel-register --compilers js:babel-core/register ./test/index.js"
   },
   "repository": {
     "type": "git",
@@ -26,6 +28,10 @@
   },
   "homepage": "https://github.com/pdupavillon/express-recaptcha",
   "devDependencies": {
+    "babel-cli": "^6.26.0",
+    "babel-core": "^6.26.0",
+    "babel-preset-es2015": "^6.24.1",
+    "babel-register": "^6.26.0",
     "mocha": "^3.0.2",
     "should": "^11.2.1",
     "sinon": "^2.4.1"

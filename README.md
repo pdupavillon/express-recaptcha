@@ -25,6 +25,17 @@ npm install express-recaptcha --save
 ## Usage
 ### Init
 ```javascript
+//### New usage (express-recaptcha version >= 3.*.*)
+
+var Recaptcha = require('express-recaptcha');
+//import Recaptcha from 'express-recaptcha'
+var recaptcha = new Recaptcha('SITE_KEY', 'SECRET_KEY');
+//or with options
+var recaptcha = new Recaptcha('SITE_KEY', 'SECRET_KEY', options);
+```
+
+```javascript
+//--- Old usage (express-recaptcha version <= 2.3)
 var recaptcha = require('express-recaptcha');
 //...
 recaptcha.init('SITE_KEY', 'SECRET_KEY');
@@ -74,9 +85,9 @@ var express = require('express');
 var bodyParser = require('body-parser');
 var pub = __dirname + '/public';
 var app = express();
-var recaptcha = require('express-recaptcha');
+var Recaptcha = require('express-recaptcha');
 
-recaptcha.init('SITE_KEY', 'SECRET_KEY');
+var recaptcha = new Recaptcha('SITE_KEY', 'SECRET_KEY');
 
 //- required by express-recaptcha in order to get data from body or query.
 app.use(bodyParser.json());
@@ -115,9 +126,9 @@ var express = require('express');
 var bodyParser = require('body-parser');
 var pub = __dirname + '/public';
 var app = express();
-var recaptcha = require('express-recaptcha');
+var Recaptcha = require('express-recaptcha');
 
-recaptcha.init('SITE_KEY', 'SECRET_KEY');
+var recaptcha = new Recaptcha('SITE_KEY', 'SECRET_KEY');
 
 //- required by express-recaptcha in order to get data from body or query.
 app.use(bodyParser.json());
