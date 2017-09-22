@@ -102,15 +102,12 @@ var Recaptcha = function () {
 
       return {
         render: function render(req, res, next) {
-          req.recaptcha = _this.render();
+          res.recaptcha = _this.render();
           next();
         },
         verify: function verify(req, res, next) {
           _this.verify(req, function (error, data) {
-            req.recaptcha = { error: error };
-            if (data) {
-              req.recaptcha.hostname = data.hostname;
-            }
+            req.recaptcha = { error: error, data: data };
             next();
           });
         }
