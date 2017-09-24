@@ -19,12 +19,23 @@ npm install express-recaptcha --save
 * BodyParser middleware - to get captcha data from query (usage depends on the version of expressjs you have)
     ```javascript
     app.use(bodyParser.json());
-    app.use(bodyParser.urlencoded());
+    app.use(bodyParser.urlencoded({ extended: true }));
     ```
 
 ## Usage
 ### Init
 ```javascript
+//### New usage (express-recaptcha version >= 3.*.*)
+
+var Recaptcha = require('express-recaptcha');
+//import Recaptcha from 'express-recaptcha'
+var recaptcha = new Recaptcha('SITE_KEY', 'SECRET_KEY');
+//or with options
+var recaptcha = new Recaptcha('SITE_KEY', 'SECRET_KEY', options);
+```
+
+```javascript
+//--- Old usage (express-recaptcha version <= 2.3.0)
 var recaptcha = require('express-recaptcha');
 //...
 recaptcha.init('SITE_KEY', 'SECRET_KEY');
@@ -48,16 +59,19 @@ For more explanations, please refer to the documentation
 https://developers.google.com/recaptcha/docs/display#config
 
 ### Render
-middleware render method set the `recaptcha` property of `req` object, with the generated html code.
+middleware render method set the `recaptcha` property of `res` object (new in version >= 3.\*.*, was `req` previously), with the generated html code.
 
 ### Verify
 middleware Verify method set the `recaptcha` property of `req` object, with validation informations.
 ```javascript
 {
     error: string, //error code (see below), null if success
-    hostname: string //the hostname of the site where the reCAPTCHA was solved 
+    data: {
+        hostname: string //the hostname of the site where the reCAPTCHA was solved
+    } 
 }
 ```
+
 ### List of possible error codes
 
 | Error code    | Description   |
@@ -74,9 +88,9 @@ var express = require('express');
 var bodyParser = require('body-parser');
 var pub = __dirname + '/public';
 var app = express();
-var recaptcha = require('express-recaptcha');
+var Recaptcha = require('express-recaptcha');
 
-recaptcha.init('SITE_KEY', 'SECRET_KEY');
+var recaptcha = new Recaptcha('SITE_KEY', 'SECRET_KEY');
 
 //- required by express-recaptcha in order to get data from body or query.
 app.use(bodyParser.json());
@@ -87,7 +101,7 @@ app.set('views', __dirname + '/views');
 app.set('view engine', 'jade');
 
 app.get('/', recaptcha.middleware.render, function(req, res){
-  res.render('login', { captcha:req.recaptcha });
+  res.render('login', { captcha:res.recaptcha });
 });
 
 app.post('/', recaptcha.middleware.verify, function(req, res){
@@ -115,9 +129,9 @@ var express = require('express');
 var bodyParser = require('body-parser');
 var pub = __dirname + '/public';
 var app = express();
-var recaptcha = require('express-recaptcha');
+var Recaptcha = require('express-recaptcha');
 
-recaptcha.init('SITE_KEY', 'SECRET_KEY');
+var recaptcha = new Recaptcha('SITE_KEY', 'SECRET_KEY');
 
 //- required by express-recaptcha in order to get data from body or query.
 app.use(bodyParser.json());
@@ -140,6 +154,14 @@ app.post('/', function(req, res){
     });
 });
 ```
+
+## Example
+
+Check example folder for more infos :
+```
+$ node example\server.js
+```
+
 [ci-image]: https://travis-ci.org/pdupavillon/express-recaptcha.svg?branch=master
 [ci-url]: https://travis-ci.org/pdupavillon/express-recaptcha
 [npm-version-image]: https://badge.fury.io/js/express-recaptcha.svg
