@@ -1,0 +1,15 @@
+html
+  head
+    title Express-Recaptcha example
+  body
+    h1 Express-Recaptcha example
+    if (captcha)
+        form(method="POST")
+            p !{captcha}
+            button(type='submit') Verify captcha
+    else
+        if (error)
+            div(style="color:red") Error : #{error}
+        else
+            div(style="color:green") Data : #{data}
+        a(href="/") Retry

@@ -1,6 +1,6 @@
-import Recaptcha from '../src/express-recaptcha'
+const Recaptcha = require('../../lib/express-recaptcha')
 
-export default class RecaptchaWrapper{
+module.exports = class RecaptchaWrapper{
     constructor(isMiddleware, opt){
       this._isMiddleware = isMiddleware
       this._recaptcha = new Recaptcha('SITE_KEY', 'SECRET_KEY', opt)

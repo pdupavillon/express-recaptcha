@@ -1,8 +1,8 @@
-import Should from 'should'
-import Sinon from 'sinon'
-import Recaptcha from '../src/express-recaptcha.js'
-import HttpTestHelper from './httpTestHelper'
-import RecaptchaWrapper from './recaptchaWrapper'
+const Should = require('should')
+const Sinon = require('sinon')
+const Recaptcha = require('../lib/express-recaptcha.js')
+const HttpTestHelper = require('./helpers/httpTestHelper')
+const RecaptchaWrapper = require('./helpers/recaptchaWrapper')
 const API_URL = 'www.google.com/recaptcha/api.js'
 
 describe('Recaptcha', () => {

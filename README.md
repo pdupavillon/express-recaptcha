@@ -19,7 +19,7 @@ npm install express-recaptcha --save
 * BodyParser middleware - to get captcha data from query (usage depends on the version of expressjs you have)
     ```javascript
     app.use(bodyParser.json());
-    app.use(bodyParser.urlencoded());
+    app.use(bodyParser.urlencoded({ extended: true }));
     ```
 
 ## Usage
@@ -154,6 +154,14 @@ app.post('/', function(req, res){
     });
 });
 ```
+
+## Example
+
+Check example folder for more infos :
+```
+$ node example\server.js
+```
+
 [ci-image]: https://travis-ci.org/pdupavillon/express-recaptcha.svg?branch=master
 [ci-url]: https://travis-ci.org/pdupavillon/express-recaptcha
 [npm-version-image]: https://badge.fury.io/js/express-recaptcha.svg

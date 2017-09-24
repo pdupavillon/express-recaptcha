@@ -1,8 +1,8 @@
-import {PassThrough} from 'stream'
-import Sinon from 'sinon'
-import Https from 'https'
+const {PassThrough} = require('stream')
+const Sinon = require('sinon')
+const Https = require('https')
 
-export default class HttpTestHelper {
+module.exports = class HttpTestHelper {
     constructor() {
         this.testHost = 'www.test-host.com'
         this.httpBodyResponse = '{"success":true, "hostname":"' + this.testHost + '"}'
