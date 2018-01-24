@@ -31,9 +31,11 @@ describe('Recaptcha', () => {
     result.should.be.equal(expected)
   }
 
-  const Verify = (done) => {
+  const Verify = (done, reqType = 'body') => {
+      let req = {};
+      req[reqType] = {'g-recaptcha-response':'1234578910'}
       _httpTestHelper.build()
-      RecaptchaWrapper.Init(_isMiddleware).verify({body:{'g-recaptcha-response':'1234578910'}}, (error, data) => {
+      RecaptchaWrapper.Init(_isMiddleware).verify(req, (error, data) => {
         Should(error).be.exactly(null)
 
         data.should.have.property('hostname').which.be.equal(_httpTestHelper.testHost)
@@ -123,7 +125,9 @@ describe('Recaptcha', () => {
     beforeEach(() => { _isMiddleware = false})
     it('Render', () => Render())
     it('Render with options', () => RenderWithOption())
-    it('Verify', (done) => Verify(done))
+    it('Verify in req.body', (done) => Verify(done, 'body'))
+    it('Verify in req.query', (done) => Verify(done, 'query'))
+    it('Verify in req.params', (done) => Verify(done, 'params'))
     it('Verify with error', (done) => VerifyError(done))
     it('Verify client ip - x-forwarded-for header', (done) => VerifyClientIpHeader(done))
     it('Verify client ip - connection remote addr', (done) => VerifyClientIpRemoteAddr(done))
@@ -133,7 +137,9 @@ describe('Recaptcha', () => {
     beforeEach(() => { _isMiddleware = true })
     it('Render', () => Render())
     it('Render with options', () => RenderWithOption())
-    it('Verify', (done) => Verify(done))
+    it('Verify in req.body', (done) => Verify(done, 'body'))
+    it('Verify in req.query', (done) => Verify(done, 'query'))
+    it('Verify in req.params', (done) => Verify(done, 'params'))
     it('Verify with error', (done) => VerifyError(done))
     it('Verify client ip - x-forwarded-for header', (done) => VerifyClientIpHeader(done))
     it('Verify client ip - connection remote addr', (done) => VerifyClientIpRemoteAddr(done))
