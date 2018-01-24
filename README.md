@@ -62,6 +62,8 @@ https://developers.google.com/recaptcha/docs/display#config
 middleware render method set the `recaptcha` property of `res` object (new in version >= 3.\*.*, was `req` previously), with the generated html code.
 
 ### Verify
+Verify is performed on `params`,`query`,and `body` properties of `req` object.
+
 middleware Verify method set the `recaptcha` property of `req` object, with validation informations.
 ```javascript
 {
