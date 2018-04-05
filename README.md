@@ -36,11 +36,11 @@ var recaptcha = new Recaptcha('SITE_KEY', 'SECRET_KEY', options);
 
 ```javascript
 //--- Old usage (express-recaptcha version 3.*.*)
-var recaptcha = require('express-recaptcha');
-//...
-recaptcha.init('SITE_KEY', 'SECRET_KEY');
-//or
-recaptcha.init('SITE_KEY', 'SECRET_KEY', options);
+var Recaptcha = require('express-recaptcha');
+//import Recaptcha from 'express-recaptcha'
+var recaptcha = new Recaptcha('SITE_KEY', 'SECRET_KEY');
+//or with options
+var recaptcha = new Recaptcha('SITE_KEY', 'SECRET_KEY', options);
 ```
 `options` available properties
 * `onload` The callback function that gets called when all the dependencies have loaded.
