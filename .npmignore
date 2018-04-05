@@ -6,3 +6,4 @@ mocha.opts
 src/
 test/
 example/
+node_modules/
