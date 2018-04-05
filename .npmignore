@@ -1,5 +1,10 @@
-package.json
-test.js
-mocha.opts
-.travis.yml
+.gitignore
 .npmignore
+.travis.yml
+base.tsconfig.json
+mocha.opts
+package-lock.json
+package.json
+src/
+test/
+example/

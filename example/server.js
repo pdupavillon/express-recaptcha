@@ -1,8 +1,8 @@
 const express = require('express')
 const bodyParser = require('body-parser')
-const Recaptcha = require('../lib/express-recaptcha')
-const RECAPTCHA_SITE_KEY = 'xxxxxx'
-const RECAPTCHA_SECRET_KEY = 'xxxxxx'
+const Recaptcha = require('../dist').Recaptcha
+const RECAPTCHA_SITE_KEY = 'xxxx'
+const RECAPTCHA_SECRET_KEY = 'xxxx'
 const app = express()
 const recaptcha = new Recaptcha(RECAPTCHA_SITE_KEY, RECAPTCHA_SECRET_KEY)
 
