@@ -1,0 +1,22 @@
+{
+    "compilerOptions": {
+        "target": "es5",
+        "module": "commonjs",
+        "moduleResolution": "node",
+        "esModuleInterop": true,
+        "declaration": true,
+        "noImplicitAny": true,
+        "strict": true,
+        "removeComments": true,
+        "skipLibCheck": false,
+        "sourceMap": false,
+        "listFiles": false,
+        "newLine": "LF",
+        "noEmitOnError": true,
+        "allowJs": false
+    },
+    "exclude": [
+        "node_modules",
+        "dist"
+    ]
+}

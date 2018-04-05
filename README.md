@@ -25,9 +25,9 @@ npm install express-recaptcha --save
 ## Usage
 ### Init
 ```javascript
-//### New usage (express-recaptcha version >= 3.*.*)
+//### New usage (express-recaptcha version >= 4.*.*)
 
-var Recaptcha = require('express-recaptcha');
+var Recaptcha = require('express-recaptcha').Recaptcha;
 //import Recaptcha from 'express-recaptcha'
 var recaptcha = new Recaptcha('SITE_KEY', 'SECRET_KEY');
 //or with options
@@ -35,12 +35,12 @@ var recaptcha = new Recaptcha('SITE_KEY', 'SECRET_KEY', options);
 ```
 
 ```javascript
-//--- Old usage (express-recaptcha version <= 2.3.0)
-var recaptcha = require('express-recaptcha');
-//...
-recaptcha.init('SITE_KEY', 'SECRET_KEY');
-//or
-recaptcha.init('SITE_KEY', 'SECRET_KEY', options);
+//--- Old usage (express-recaptcha version 3.*.*)
+var Recaptcha = require('express-recaptcha');
+//import Recaptcha from 'express-recaptcha'
+var recaptcha = new Recaptcha('SITE_KEY', 'SECRET_KEY');
+//or with options
+var recaptcha = new Recaptcha('SITE_KEY', 'SECRET_KEY', options);
 ```
 `options` available properties
 * `onload` The callback function that gets called when all the dependencies have loaded.
@@ -90,7 +90,7 @@ var express = require('express');
 var bodyParser = require('body-parser');
 var pub = __dirname + '/public';
 var app = express();
-var Recaptcha = require('express-recaptcha');
+var Recaptcha = require('express-recaptcha').Recaptcha;
 
 var recaptcha = new Recaptcha('SITE_KEY', 'SECRET_KEY');
 
@@ -131,7 +131,7 @@ var express = require('express');
 var bodyParser = require('body-parser');
 var pub = __dirname + '/public';
 var app = express();
-var Recaptcha = require('express-recaptcha');
+var Recaptcha = require('express-recaptcha').Recaptcha;
 
 var recaptcha = new Recaptcha('SITE_KEY', 'SECRET_KEY');
 

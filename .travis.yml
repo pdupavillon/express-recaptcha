@@ -2,6 +2,8 @@ language: node_js
 node_js:
 - '6'
 dist: trusty
+script:
+- npm run build:prod
 deploy:
   provider: npm
   email: p.dupavillon@gmail.com

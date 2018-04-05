@@ -1,28 +1,36 @@
-const https = require('https')
+/// <reference path="../typings/index.d.ts" />
+import { NextFunction, Request, Response } from 'express';
+import * as https from 'https';
 
-module.exports = class Recaptcha{
-  constructor(site_key, secret_key, options){
-    this._api = {
-      host:'www.google.com',
-      script:'/recaptcha/api.js',
-      verify:'/recaptcha/api/siteverify'
-    }
+import { RecaptchaMiddleware, RecaptchaOptions, RecaptchaResponseData, RecaptchaResponse } from './interfaces';
+
+export class Recaptcha {
+  private _api = {
+    host:'www.google.com',
+    script:'/recaptcha/api.js',
+    verify:'/recaptcha/api/siteverify'
+  };
+  private _site_key:string;
+  private _secret_key:string;
+  private _options:RecaptchaOptions;
+
+  constructor(site_key:string, secret_key:string, options?:RecaptchaOptions){
     this._site_key = site_key
     this._secret_key = secret_key
     this._options = options || {checkremoteip:false}
     if (!this._site_key) throw new Error('site_key is required')
     if (!this._secret_key) throw new Error('secret_key is required')
   }
-  get middleware() {
+  get middleware():RecaptchaMiddleware {
     return {
-      render: (req, res, next) => {
+      render: (req:Request, res:Response, next:NextFunction) => {
         res.recaptcha = this.render()
-        next()
+        next();
       },
-      verify: (req, res, next) => {
+      verify: (req:Request, res:Response, next:NextFunction) => {
         this.verify(req, (error, data) => {
-          req.recaptcha = {error, data}
-          next()
+          req.recaptcha = <RecaptchaResponse>{error, data}
+          next();
         })
       }
     }
@@ -44,10 +52,10 @@ module.exports = class Recaptcha{
     return  '<script src="//'+this._api.host+this._api.script+query_string+'" async defer></script>'+
             '<div class="g-recaptcha" data-sitekey="'+this._site_key+'"'+captcha_attr+'></div>'
   }
-  verify(req, cb){
+  verify(req:Request, cb:(error?:string|null,data?:RecaptchaResponseData|null)=>void){
     let response = null;
     let post_options = null;
-  
+
     if (!req) throw new Error('req is required');
     if(req.body && req.body['g-recaptcha-response']) response = req.body['g-recaptcha-response'];
     if(req.query && req.query['g-recaptcha-response']) response = req.query['g-recaptcha-response'];
@@ -68,7 +76,7 @@ module.exports = class Recaptcha{
           'Content-Length': Buffer.byteLength(query_string)
       }
     }
-  
+
     let request = https.request(post_options, (res) => {
       let body = ''
 
@@ -84,7 +92,7 @@ module.exports = class Recaptcha{
         }
         else cb(error, null)
       })
-      res.on('error', (e) => { cb(e.message, null) })
+      res.on('error', (e) => { cb(e.message, null); });
     })
     request.write(query_string)
     request.end()

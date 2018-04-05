@@ -1,18 +1,20 @@
-const Should = require('should')
-const Sinon = require('sinon')
-const Recaptcha = require('../lib/express-recaptcha.js')
-const HttpTestHelper = require('./helpers/httpTestHelper')
-const RecaptchaWrapper = require('./helpers/recaptchaWrapper')
+import { expect } from 'chai';
+import { Request } from 'express';
+
+import { Recaptcha } from '../src';
+import { HostName, HttpTestHelper } from '../test/helpers/HttpTestHelper';
+import { RecaptchaWrapper } from '../test/helpers/RecaptchaWrapper';
+
 const API_URL = 'www.google.com/recaptcha/api.js'
 
 describe('Recaptcha', () => {
-  let _httpTestHelper = null
-  let _isMiddleware = false
+  let _httpTestHelper:HttpTestHelper;
+  let _isMiddleware = false;
   const Render = () => {
     const result = RecaptchaWrapper.Init(_isMiddleware).render()
     const expected = '<script src="//'+API_URL+'" async defer></script>'+
     '<div class="g-recaptcha" data-sitekey="SITE_KEY"></div>'
-    result.should.be.equal(expected)
+    expect(result).to.equal(expected)
   }
   const RenderWithOption = () => {
     const result = RecaptchaWrapper.Init(_isMiddleware ,{
@@ -28,52 +30,55 @@ describe('Recaptcha', () => {
     }).render()
     const expected = '<script src="//'+API_URL+'?onload=cb&render=explicit&hl=fr" async defer></script>'+
     '<div class="g-recaptcha" data-sitekey="SITE_KEY" data-theme="dark" data-type="audio" data-callback="callback" data-expired-callback="expired_callback" data-size="size" data-tabindex="tabindex"></div>'
-    result.should.be.equal(expected)
+    expect(result).to.equal(expected)
   }
 
-  const Verify = (done, reqType = 'body') => {
-      let req = {};
-      req[reqType] = {'g-recaptcha-response':'1234578910'}
-      _httpTestHelper.build()
+  const Verify = (done: ()=>void, reqType = 'body') => {
+      let req = <Request>{};
+      (<any>req)[reqType] = {'g-recaptcha-response':'1234578910'};
+      _httpTestHelper.build();
       RecaptchaWrapper.Init(_isMiddleware).verify(req, (error, data) => {
-        Should(error).be.exactly(null)
+        expect(error).to.be.null;
+        expect(data).to.have.property('hostname').which.be.equal(HostName);
 
-        data.should.have.property('hostname').which.be.equal(_httpTestHelper.testHost)
         _httpTestHelper.checkValidationQueryString('secret=SECRET_KEY&response=1234578910')
         done()
       })
   }
-  const VerifyError = (done) => {
+  const VerifyError = (done:()=>void) => {
       _httpTestHelper.withErrorCode('invalid-input-response').build()
 
-      RecaptchaWrapper.Init(_isMiddleware).verify({body:{'g-recaptcha-response':'1234578910'}}, (error, data) => {
-        Should(data).be.exactly(null)
+      RecaptchaWrapper.Init(_isMiddleware).verify(<Request>{body:{'g-recaptcha-response':'1234578910'}}, (error, data) => {
+        expect(data).to.be.null;
 
-        error.should.be.equal("invalid-input-response")
+        expect(error).to.be.equal("invalid-input-response")
         _httpTestHelper.checkValidationQueryString('secret=SECRET_KEY&response=1234578910')
         done()
       })
   }
-  const VerifyClientIpHeader = (done) => {
+  const VerifyClientIpHeader = (done:()=>void) => {
       _httpTestHelper.build()
-
-      RecaptchaWrapper.Init(_isMiddleware, {checkremoteip: true}).verify({body:{'g-recaptcha-response':'1234578910'},headers:{'x-forwarded-for':'10.0.0.1'}}, (error) => {
-        (error === null).should.be.true()
+      let req = {
+        body:{'g-recaptcha-response':'1234578910'},
+        headers:{'x-forwarded-for':'10.0.0.1'}
+      };
+      RecaptchaWrapper.Init(_isMiddleware, {checkremoteip: true}).verify(<Request><any>req, (error) => {
+        expect(error).to.be.null;
         _httpTestHelper.checkValidationQueryString('secret=SECRET_KEY&response=1234578910&remoteip=10.0.0.1')
         done()
       })
   }
-  const VerifyClientIpRemoteAddr = (done) => {
+  const VerifyClientIpRemoteAddr = (done:()=>void) => {
       _httpTestHelper.build()
-
-      RecaptchaWrapper.Init(_isMiddleware, {checkremoteip: true}).verify({body:{'g-recaptcha-response':'1234578910'}, connection:{remoteAddress:'10.0.0.1'}}, (error) => {
-        (error === null).should.be.true()
+    let req = {body:{'g-recaptcha-response':'1234578910'}, connection:{remoteAddress:'10.0.0.1'}};
+      RecaptchaWrapper.Init(_isMiddleware, {checkremoteip: true}).verify(<Request><any>req, (error) => {
+        expect(error).to.be.null;
         _httpTestHelper.checkValidationQueryString('secret=SECRET_KEY&response=1234578910&remoteip=10.0.0.1')
         done()
       })
   }  
   beforeEach(() => {
-    _httpTestHelper = new HttpTestHelper()
+    _httpTestHelper = new HttpTestHelper();
   })
 	afterEach(() => {
     _httpTestHelper.restore()
@@ -81,10 +86,10 @@ describe('Recaptcha', () => {
 
   it('Init', () => {
     let recaptcha = new Recaptcha('SITE_KEY','SECRET_KEY')
-    recaptcha.should.be.ok
-    recaptcha._site_key.should.be.ok().and.be.equal('SITE_KEY')
-    recaptcha._secret_key.should.be.ok().and.be.equal('SECRET_KEY')
-    recaptcha._options.checkremoteip.should.be.false()
+    expect(recaptcha).to.be.instanceof(Recaptcha);
+    expect(recaptcha).to.have.property('_site_key').equal('SITE_KEY');
+    expect(recaptcha).to.have.property('_secret_key').equal('SECRET_KEY');
+    expect(recaptcha).to.have.property('_options').that.have.property('checkremoteip').that.is.false;
   })
 
   it('Init with options', () => {
@@ -100,25 +105,27 @@ describe('Recaptcha', () => {
       tabindex:'tabindex',
       checkremoteip:true
     })
-    recaptcha.should.be.ok
-    recaptcha._site_key.should.be.ok().and.be.equal('SITE_KEY')
-    recaptcha._secret_key.should.be.ok().and.be.equal('SECRET_KEY')
-    recaptcha._options.should.be.ok
-    recaptcha._options.onload.should.be.equal('cb')
-    recaptcha._options.render.should.be.equal('explicit')
-    recaptcha._options.hl.should.be.equal('fr')
-    recaptcha._options.theme.should.be.equal('dark')
-    recaptcha._options.type.should.be.equal('audio')
-    recaptcha._options.callback.should.be.equal('callback')
-    recaptcha._options.expired_callback.should.be.equal('expired_callback')
-    recaptcha._options.size.should.be.equal('size')
-    recaptcha._options.tabindex.should.be.equal('tabindex')
-    recaptcha._options.checkremoteip.should.be.true()
+    expect(recaptcha).to.be.instanceof(Recaptcha);
+    expect(recaptcha).to.have.property('_site_key').to.be.equal('SITE_KEY')
+    expect(recaptcha).to.have.property('_secret_key').to.be.equal('SECRET_KEY')
+    expect(recaptcha).to.have.property('_options')
+    .to.include({
+      onload:'cb',
+      render:'explicit',
+      hl:'fr',
+      theme:'dark',
+      type:'audio',
+      callback:'callback',
+      expired_callback:'expired_callback',
+      size:'size',
+      tabindex:'tabindex',
+      checkremoteip:true
+    });
   })
 
   it('Not init', () => {
-    (() => new Recaptcha()).should.throw('site_key is required');
-    (() => new Recaptcha('SITE_KEY')).should.throw('secret_key is required');
+    expect(() => new Recaptcha(null, null)).to.throw('site_key is required');
+    expect(() => new Recaptcha('SITE_KEY', null)).to.throw('secret_key is required');
   })
 
   describe('Direct use', () => {
