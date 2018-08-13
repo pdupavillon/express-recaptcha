@@ -1,4 +1,4 @@
-import {RecaptchaResponse} from '../src/interfaces';
+import { RecaptchaResponse } from '../interfaces';
 
 declare global {
     namespace Express {

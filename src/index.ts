@@ -1,4 +1,4 @@
-/// <reference path="../typings/index.d.ts" />
+/// <reference path="./typings/index.ts" />
 import { NextFunction, Request, Response } from 'express';
 import * as https from 'https';
 
