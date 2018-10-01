@@ -109,7 +109,7 @@ The response verification is performed on `params`, `query`, and `body` properti
 Examples
 --------------------------------------------------------------------------------
 
-### app.js - with verification middleware:
+### express-recaptcha - with verification middleware:
 
 ```javascript
 var express = require('express');
@@ -141,7 +141,7 @@ app.post('/', recaptcha.middleware.verify, function(req, res){
 });
 ```
 
-### app.js - without verification middleware:
+### express-recaptcha - without verification middleware: (using callbacks instead)
 
 ```javascript
 var express = require('express');
