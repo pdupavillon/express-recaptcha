@@ -141,7 +141,7 @@ app.post('/', recaptcha.middleware.verify, function(req, res){
 });
 ```
 
-### express-recaptcha - without verification middleware: (using callbacks instead)
+### express-recaptcha - without verification middleware: (using `recaptcha.verify` callback instead)
 
 ```javascript
 var express = require('express');
