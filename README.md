@@ -1,32 +1,50 @@
-# express-recaptcha
+express-recaptcha
+================================================================================
+
 [![NPM](https://nodei.co/npm/express-recaptcha.png?compact=true)](https://nodei.co/npm/express-recaptcha/)
 
 [![Build Status][ci-image]][ci-url]
 [![npm version][npm-version-image]][npm-version-url]
 
-Google recaptcha middleware for express.
-
-Link : https://www.google.com/recaptcha
+[Google recaptcha][Google-recaptcha] middleware for express.
 
 <img src="https://www.google.com/recaptcha/intro/images/hero-recaptcha-demo.gif" width="300px" />
 
-## Installation
+Table of contents
+--------------------------------------------------------------------------------
+
+- [Installation](#Installation)
+- [Requirements](#Requirements)
+- [Usage](#Usage)
+  - [How to initialise](#How-to-initialise)
+  - [`options` available/properties:](#user-content-options-availableproperties)
+  - [List of possible error codes](#List-of-possible-error-codes)
+- [Examples](#Examples)
+
+Installation
+--------------------------------------------------------------------------------
+
 ```shell
 npm install express-recaptcha --save
 ```
-## Requirements
-* Expressjs
-* BodyParser middleware - to get captcha data from query (usage depends on the version of expressjs you have)
-    ```javascript
-    app.use(bodyParser.json());
-    app.use(bodyParser.urlencoded({ extended: true }));
-    ```
 
-## Usage
-### Init
+Requirements
+--------------------------------------------------------------------------------
+
+- [Expressjs][expressjs]
+- A [body parser][body-parser] middleware to get captcha data from query: (If you're using an express version older than 4.16.0)
+  ```javascript
+  app.use(bodyParser.json());
+  app.use(bodyParser.urlencoded({ extended: true }));
+  ```
+
+Usage
+--------------------------------------------------------------------------------
+
+### How to initialise:
+
+#### For versions >= 4.\*.\*: (New usage)
 ```javascript
-//### New usage (express-recaptcha version >= 4.*.*)
-
 var Recaptcha = require('express-recaptcha').Recaptcha;
 //import Recaptcha from 'express-recaptcha'
 var recaptcha = new Recaptcha('SITE_KEY', 'SECRET_KEY');
@@ -34,57 +52,65 @@ var recaptcha = new Recaptcha('SITE_KEY', 'SECRET_KEY');
 var recaptcha = new Recaptcha('SITE_KEY', 'SECRET_KEY', options);
 ```
 
+If you're using the older version of express-recaptcha (`3.\*.\*`), then you should require Recaptcha like so: (everything else is unchanged)
+
 ```javascript
-//--- Old usage (express-recaptcha version 3.*.*)
 var Recaptcha = require('express-recaptcha');
-//import Recaptcha from 'express-recaptcha'
-var recaptcha = new Recaptcha('SITE_KEY', 'SECRET_KEY');
-//or with options
-var recaptcha = new Recaptcha('SITE_KEY', 'SECRET_KEY', options);
 ```
-`options` available properties
-* `onload` The callback function that gets called when all the dependencies have loaded.
-* `render` Value could be **explicit** OR **onload**, Whether to render the widget explicitly.
-* `hl` (Optional). Forces the widget to render in a specific language (Auto-detects if unspecified).
-* `theme` (Optional). Value could be **dark** OR **light**, The color theme of the widget (default light).
-* `type` (Optional). Value could be **audio** OR **image**, The type of CAPTCHA to serve.
-* `callback` (Optional). Your callback function that's executed when the user submits a successful CAPTCHA response.
-* `expired_callback` (Optional).Your callback function that's executed when the recaptcha response expires and the user needs to solve a new CAPTCHA.
-* `size` (Optional). The size of the widget.
-* `tabindex` (Optional). The tabindex of the widget and challenge. If other elements in your page use tabindex, it should be set to make user navigation easier.
-* `checkremoteip` (Optional). Adding support of remoteip verification (based on x-forwarded-for header or remoteAddress.Value could be **true** OR **false** (default **false**). (more info on : https://developers.google.com/recaptcha/docs/verify)
 
+#### `options` available/properties:
 
-For more explanations, please refer to the documentation
-https://developers.google.com/recaptcha/docs/display#config
+| option             | description                                                                                                                                         | required? |
+|--------------------|-----------------------------------------------------------------------------------------------------------------------------------------------------|-----------|
+| `onload`           | The callback function that gets called when all the dependencies have loaded.                                                                       | yes       |
+| `render`           | Value could be **explicit** OR **onload**, Whether to render the widget explicitly.                                                                 | yes       |
+| `hl`               | Forces the widget to render in a specific language (Auto-detects if unspecified).                                                                   | no        |
+| `theme`            | Value could be **dark** OR **light**, The color theme of the widget (default light).                                                                | no        |
+| `type`             | Value could be **audio** OR **image**, The type of CAPTCHA to serve.                                                                                | no        |
+| `callback`         | Your callback function that's executed when the user submits a successful CAPTCHA response.                                                         | no        |
+| `expired_callback` | Your callback function that's executed when the recaptcha response expires and the user needs to solve a new CAPTCHA.                               | no        |
+| `size`             | The size of the widget.                                                                                                                             | no        |
+| `tabindex`         | The tabindex of the widget and challenge. If other elements in your page use tabindex, it should be set to make user navigation easier.             | no        |
+| `checkremoteip`    | Adding support of remoteip verification (based on x-forwarded-for header or remoteAddress.Value could be **true** OR **false** (default **false**). | no        |
 
-### Render
-middleware render method set the `recaptcha` property of `res` object (new in version >= 3.\*.*, was `req` previously), with the generated html code.
+**For more information, please refer to:**
+- [reCaptcha - display](https://developers.google.com/recaptcha/docs/display#config)
+- [reCaptcha - verify ](https://developers.google.com/recaptcha/docs/verify)
 
-### Verify
-Verify is performed on `params`,`query`,and `body` properties of `req` object.
+### Render - `recaptcha.middleware.render`
+The middleware's render method sets the `recaptcha` property of `res` object (new in version >= 3.\*.\*, was `req` previously), with the generated html code. Therefore, you can easily append recaptcha into your view by passing `res.recaptcha`.
 
-middleware Verify method set the `recaptcha` property of `req` object, with validation informations.
+### Verify - `recaptcha.middleware.verify`
+The middleware's verify method sets the `recaptcha` property of `req` object, with validation information. Here is an example of a `req.recaptcha` response:
+
+The response verification is performed on `params`, `query`, and `body` properties for the `req` object.
+
+#### Example of verification response:
+
 ```javascript
 {
-    error: string, //error code (see below), null if success
-    data: {
-        hostname: string //the hostname of the site where the reCAPTCHA was solved
-    } 
+  error: string, // error code (see table below), null if success
+  data: {
+    hostname: string // the site's hostname where the reCAPTCHA was solved
+  }
 }
 ```
 
-### List of possible error codes
+#### List of possible error codes:
 
-| Error code    | Description   |
-|:------------- |:-------------|
-| missing-input-secret  | The secret parameter is missing. |
-| invalid-input-secret      | The secret parameter is invalid or malformed.      |
-| missing-input-response | The response parameter is missing.      |
-| invalid-input-response | The response parameter is invalid or malformed.      |
+| Error code               | Description                                     |
+|:-------------------------|:------------------------------------------------|
+| `missing-input-secret`   | The secret parameter is missing.                |
+| `invalid-input-secret`   | The secret parameter is invalid or malformed.   |
+| `missing-input-response` | The response parameter is missing.              |
+| `invalid-input-response` | The response parameter is invalid or malformed. |
 
 
-### Example
+Examples
+--------------------------------------------------------------------------------
+
+### app.js - with verification middleware:
+
 ```javascript
 var express = require('express');
 var bodyParser = require('body-parser');
@@ -107,25 +133,16 @@ app.get('/', recaptcha.middleware.render, function(req, res){
 });
 
 app.post('/', recaptcha.middleware.verify, function(req, res){
-    if (!req.recaptcha.error)
-        // success code
-    else
-        // error code
+  if (!req.recaptcha.error) {
+    // success code
+  } else {
+    // error code
+  }
 });
 ```
 
-### Verify - without middleware
-The verify callback takes 2 arguments : 
+### app.js - without verification middleware:
 
-* `error`: null|string (see list of possible error codes above)
-* `data`: object, with the following definition
-```javascript
-{
-    hostname: string //the hostname of the site where the reCAPTCHA was solved 
-}
-```
-
-### Example - without middleware
 ```javascript
 var express = require('express');
 var bodyParser = require('body-parser');
@@ -148,18 +165,20 @@ app.get('/', function(req, res){
 });
 
 app.post('/', function(req, res){
-    recaptcha.verify(req, function(error, data){
-        if(!error)
-            //success code
-        else
-            //error code
-    });
+  recaptcha.verify(req, function(error, data){
+    if (!req.recaptcha.error) {
+      // success code
+    } else {
+      // error code
+    }
+  });
 });
 ```
 
-## Example
+### Demo:
 
-Check example folder for more infos :
+Run the example folder for a live demo:
+
 ```
 $ node example\server.js
 ```
@@ -168,3 +187,7 @@ $ node example\server.js
 [ci-url]: https://travis-ci.org/pdupavillon/express-recaptcha
 [npm-version-image]: https://badge.fury.io/js/express-recaptcha.svg
 [npm-version-url]: http://badge.fury.io/js/express-recaptcha
+
+[expressjs]: https://github.com/expressjs/express
+[body-parser]: https://github.com/expressjs/body-parser
+[Google-recaptcha]:https://www.google.com/recaptcha
