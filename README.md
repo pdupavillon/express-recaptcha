@@ -13,13 +13,13 @@ express-recaptcha
 Table of contents
 --------------------------------------------------------------------------------
 
-- [Installation](#Installation)
-- [Requirements](#Requirements)
-- [Usage](#Usage)
-  - [How to initialise](#How-to-initialise)
+- [Installation](#installation)
+- [Requirements](#requirements)
+- [Usage](#usage)
+  - [How to initialise](#how-to-initialise)
   - [`options` available/properties:](#user-content-options-availableproperties)
-  - [List of possible error codes](#List-of-possible-error-codes)
-- [Examples](#Examples)
+  - [List of possible error codes](#list-of-possible-error-codes)
+- [Examples](#examples)
 
 Installation
 --------------------------------------------------------------------------------
