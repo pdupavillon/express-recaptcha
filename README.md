@@ -17,7 +17,9 @@ Table of contents
 - [Requirements](#requirements)
 - [Usage](#usage)
   - [How to initialise](#how-to-initialise)
-  - [`options` available/properties:](#user-content-options-availableproperties)
+  - [`options` available/properties](#options-availableproperties)
+  - [Render - `recaptcha.middleware.render`](#render---recaptchamiddlewarerender)
+  - [Verify - `recaptcha.middleware.verify`](#verify---recaptchamiddlewareverify)
   - [List of possible error codes](#list-of-possible-error-codes)
 - [Examples](#examples)
 
@@ -78,12 +80,30 @@ var Recaptcha = require('express-recaptcha');
 - [reCaptcha - verify ](https://developers.google.com/recaptcha/docs/verify)
 
 ### Render - `recaptcha.middleware.render`
-The middleware's render method sets the `recaptcha` property of `res` object (new in version >= 3.\*.\*, was `req` previously), with the generated html code. Therefore, you can easily append recaptcha into your view by passing `res.recaptcha`.
+The middleware's render method sets the `recaptcha` property of `res` object (new in version >= 3.\*.\*, was `req` previously), with the generated html code. Therefore, you can easily append recaptcha into your templates by passing `res.recaptcha` to the view:
+
+```js
+app.get('/', recaptcha.middleware.render, function(req, res){
+  res.render('login', { captcha:res.recaptcha });
+});
+```
 
 ### Verify - `recaptcha.middleware.verify`
-The middleware's verify method sets the `recaptcha` property of `req` object, with validation information. Here is an example of a `req.recaptcha` response:
+The middleware's verify method sets the `recaptcha` property of `req` object, with validation information:
+
+```js
+app.post('/', recaptcha.middleware.verify, function(req, res){
+  if (!req.recaptcha.error) {
+    // success code
+  } else {
+    // error code
+  }
+});
+```
 
 The response verification is performed on `params`, `query`, and `body` properties for the `req` object.
+
+Here is an example of a `req.recaptcha` response:
 
 #### Example of verification response:
 
