@@ -1,5 +1,4 @@
-express-recaptcha
-================================================================================
+# express-recaptcha
 
 [![NPM](https://nodei.co/npm/express-recaptcha.png?compact=true)](https://nodei.co/npm/express-recaptcha/)
 
@@ -10,8 +9,7 @@ express-recaptcha
 
 <img src="https://www.google.com/recaptcha/intro/images/hero-recaptcha-demo.gif" width="300px" />
 
-Table of contents
---------------------------------------------------------------------------------
+## Table of contents
 
 - [Installation](#installation)
 - [Requirements](#requirements)
@@ -23,15 +21,13 @@ Table of contents
   - [List of possible error codes](#list-of-possible-error-codes)
 - [Examples](#examples)
 
-Installation
---------------------------------------------------------------------------------
+## Installation
 
 ```shell
 npm install express-recaptcha --save
 ```
 
-Requirements
---------------------------------------------------------------------------------
+## Requirements
 
 - [Expressjs][expressjs]
 - A [body parser][body-parser] middleware to get captcha data from query: (If you're using an express version older than 4.16.0)
@@ -40,8 +36,7 @@ Requirements
   app.use(bodyParser.urlencoded({ extended: true }));
   ```
 
-Usage
---------------------------------------------------------------------------------
+## Usage
 
 ### How to initialise:
 
@@ -126,8 +121,7 @@ Here is an example of a `req.recaptcha` response:
 | `invalid-input-response` | The response parameter is invalid or malformed. |
 
 
-Examples
---------------------------------------------------------------------------------
+## Examples
 
 ### express-recaptcha - with verification middleware:
 
