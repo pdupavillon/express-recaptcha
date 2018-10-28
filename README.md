@@ -17,6 +17,7 @@
   - [How to initialise](#how-to-initialise)
   - [`options` available/properties](#options-availableproperties)
   - [Render - `recaptcha.middleware.render`](#render---recaptchamiddlewarerender)
+  - [Render and override options - `recaptcha.middleware.renderWith`](#render---recaptchamiddlewarerenderwith)
   - [Verify - `recaptcha.middleware.verify`](#verify---recaptchamiddlewareverify)
   - [List of possible error codes](#list-of-possible-error-codes)
 - [Examples](#examples)
@@ -77,16 +78,25 @@ var Recaptcha = require('express-recaptcha');
 ### Render - `recaptcha.middleware.render`
 The middleware's render method sets the `recaptcha` property of `res` object (new in version >= 3.\*.\*, was `req` previously), with the generated html code. Therefore, you can easily append recaptcha into your templates by passing `res.recaptcha` to the view:
 
-```js
-app.get('/', recaptcha.middleware.render, function(req, res){
+```javascript
+app.get('/', recaptcha.middleware.render(), function(req, res){
   res.render('login', { captcha:res.recaptcha });
 });
 ```
 
+### Render - `recaptcha.middleware.renderWith`
+Same as the render middleware method except that you can override the options in parameter :
+```javascript
+app.get('/', recaptcha.middleware.renderWith({'theme':'dark'}), function(req, res){
+  res.render('login', { captcha:res.recaptcha });
+});
+```
+
+
 ### Verify - `recaptcha.middleware.verify`
 The middleware's verify method sets the `recaptcha` property of `req` object, with validation information:
 
-```js
+```javascript
 app.post('/', recaptcha.middleware.verify, function(req, res){
   if (!req.recaptcha.error) {
     // success code
@@ -146,6 +156,11 @@ app.get('/', recaptcha.middleware.render, function(req, res){
   res.render('login', { captcha:res.recaptcha });
 });
 
+// override default options for that route
+app.get('/fr', recaptcha.middleware.renderWith({'hl':'fr'}), function(req, res){
+  res.render('login', { captcha:res.recaptcha });
+});
+
 app.post('/', recaptcha.middleware.verify, function(req, res){
   if (!req.recaptcha.error) {
     // success code
@@ -176,6 +191,11 @@ app.set('view engine', 'jade');
 
 app.get('/', function(req, res){
   res.render('login', { captcha:recaptcha.render() });
+});
+
+// override default options for that route
+app.get('/fr', function(req, res){
+  res.render('login', { captcha:recaptcha.renderWith({'hl':'fr'}) });
 });
 
 app.post('/', function(req, res){

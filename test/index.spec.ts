@@ -27,9 +27,28 @@ describe('Recaptcha', () => {
       expired_callback:'expired_callback',
       size:'size',
       tabindex:'tabindex'
-    }).render()
+    }).render();
     const expected = '<script src="//'+API_URL+'?onload=cb&render=explicit&hl=fr" async defer></script>'+
     '<div class="g-recaptcha" data-sitekey="SITE_KEY" data-theme="dark" data-type="audio" data-callback="callback" data-expired-callback="expired_callback" data-size="size" data-tabindex="tabindex"></div>'
+    expect(result).to.equal(expected)
+  }
+
+  const RenderWithOverridedOptions = () => {
+    const result = RecaptchaWrapper.Init(_isMiddleware ,{
+      onload:'cb',
+      render:'explicit',
+      hl:'fr',
+      theme:'dark',
+      type:'audio',
+      callback:'callback',
+      expired_callback:'expired_callback',
+      size:'size',
+      tabindex:'tabindex'
+    }).renderWith({
+      theme:'light'
+    });
+    const expected = '<script src="//'+API_URL+'?onload=cb&render=explicit&hl=fr" async defer></script>'+
+    '<div class="g-recaptcha" data-sitekey="SITE_KEY" data-theme="light" data-type="audio" data-callback="callback" data-expired-callback="expired_callback" data-size="size" data-tabindex="tabindex"></div>'
     expect(result).to.equal(expected)
   }
 
@@ -132,6 +151,7 @@ describe('Recaptcha', () => {
     beforeEach(() => { _isMiddleware = false})
     it('Render', () => Render())
     it('Render with options', () => RenderWithOption())
+    it('Render with overrided options', () => RenderWithOverridedOptions())
     it('Verify in req.body', (done) => Verify(done, 'body'))
     it('Verify in req.query', (done) => Verify(done, 'query'))
     it('Verify in req.params', (done) => Verify(done, 'params'))
@@ -144,6 +164,7 @@ describe('Recaptcha', () => {
     beforeEach(() => { _isMiddleware = true })
     it('Render', () => Render())
     it('Render with options', () => RenderWithOption())
+    it('Render with overrided options', () => RenderWithOverridedOptions())
     it('Verify in req.body', (done) => Verify(done, 'body'))
     it('Verify in req.query', (done) => Verify(done, 'query'))
     it('Verify in req.params', (done) => Verify(done, 'params'))

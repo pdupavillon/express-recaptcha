@@ -4,9 +4,14 @@ html
   body
     h1 Express-Recaptcha example
     if (captcha)
-        form(method="POST")
+        form(method="POST", action="/")
             p !{captcha}
             button(type='submit') Verify captcha
+            br
+            if (path === '/dark')
+                a(href="/") Light Theme
+            else
+                a(href="/dark") Dark Theme
     else
         if (error)
             div(style="color:red") Error : #{error}

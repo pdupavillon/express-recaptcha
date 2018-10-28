@@ -23,6 +23,14 @@ export class RecaptchaWrapper{
       }
       return this._recaptcha.render()
     }
+    renderWith(opt:RecaptchaOptions){
+      if (this._isMiddleware) {
+        let res = <Response>{};
+        this._recaptcha.middleware.renderWith(opt)(<Request>{}, res,() => {});
+        return res.recaptcha
+      }
+      return this._recaptcha.renderWith(opt);
+    }
     verify(req:Request, cb:(error?:string,data?:RecaptchaResponseData)=>void){
       if (this._isMiddleware) {
         this._recaptcha.middleware.verify(req,<Response>{}, () => {

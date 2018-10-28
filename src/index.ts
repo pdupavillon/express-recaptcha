@@ -24,8 +24,15 @@ export class Recaptcha {
   get middleware():RecaptchaMiddleware {
     return {
       render: (req:Request, res:Response, next:NextFunction) => {
-        res.recaptcha = this.render()
+        res.recaptcha = this.render();
         next();
+      },
+      renderWith: (optionsToOverride:RecaptchaOptions) => {
+        let self = this;
+        return function(_req:Request, _res:Response, _next:NextFunction){
+          _res.recaptcha = self.renderWith(optionsToOverride);
+          _next();
+        };
       },
       verify: (req:Request, res:Response, next:NextFunction) => {
         this.verify(req, (error, data) => {
@@ -36,17 +43,23 @@ export class Recaptcha {
     }
   }
   render(){
+    return this.renderWith({});
+  }
+  renderWith(optionsToOverride:RecaptchaOptions){
     let query_string = ''
     let captcha_attr = ''
-    if (this._options.onload) query_string += '&onload='+this._options.onload
-    if (this._options.render) query_string += '&render='+this._options.render
-    if (this._options.hl) query_string += '&hl='+this._options.hl
-    if (this._options.theme) captcha_attr += ' data-theme="'+this._options.theme+'"'
-    if (this._options.type) captcha_attr += ' data-type="'+this._options.type+'"'
-    if (this._options.callback) captcha_attr += ' data-callback="'+this._options.callback+'"'
-    if (this._options.expired_callback) captcha_attr += ' data-expired-callback="'+this._options.expired_callback+'"'
-    if (this._options.size) captcha_attr += ' data-size="'+this._options.size+'"'
-    if (this._options.tabindex) captcha_attr += ' data-tabindex="'+this._options.tabindex+'"'
+
+    let options = (<any>Object).assign({},this._options, optionsToOverride);
+
+    if (options.onload) query_string += '&onload='+options.onload
+    if (options.render) query_string += '&render='+options.render
+    if (options.hl) query_string += '&hl='+options.hl
+    if (options.theme) captcha_attr += ' data-theme="'+options.theme+'"'
+    if (options.type) captcha_attr += ' data-type="'+options.type+'"'
+    if (options.callback) captcha_attr += ' data-callback="'+options.callback+'"'
+    if (options.expired_callback) captcha_attr += ' data-expired-callback="'+options.expired_callback+'"'
+    if (options.size) captcha_attr += ' data-size="'+options.size+'"'
+    if (options.tabindex) captcha_attr += ' data-tabindex="'+options.tabindex+'"'
   
     query_string = query_string.replace(/^&/,'?')
     return  '<script src="//'+this._api.host+this._api.script+query_string+'" async defer></script>'+
