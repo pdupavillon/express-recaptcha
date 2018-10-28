@@ -1,4 +1,4 @@
-///<reference path="../../typings/index.d.ts" />
+///<reference path="../../src/typings/index.ts" />
 import { expect } from 'chai';
 import { Request, Response } from 'express';
 
