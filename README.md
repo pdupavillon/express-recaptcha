@@ -79,7 +79,7 @@ var Recaptcha = require('express-recaptcha');
 The middleware's render method sets the `recaptcha` property of `res` object (new in version >= 3.\*.\*, was `req` previously), with the generated html code. Therefore, you can easily append recaptcha into your templates by passing `res.recaptcha` to the view:
 
 ```javascript
-app.get('/', recaptcha.middleware.render(), function(req, res){
+app.get('/', recaptcha.middleware.render, function(req, res){
   res.render('login', { captcha:res.recaptcha });
 });
 ```
