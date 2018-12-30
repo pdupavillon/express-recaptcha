@@ -36,9 +36,9 @@ export class HttpTestHelper {
         request.push(this.httpBodyResponse)
         request.end()
 
-        Sinon.stub(Https, 'request').callsFake((opt, cb) => {
-            cb(request)
-            return {
+        Sinon.stub(Https, 'request').callsFake((opt, cb:any) => {
+            cb(request);
+            return <any>{
                 write: that.writeSpy,
                 end: Sinon.spy()
             }
