@@ -7,7 +7,7 @@
 
 [Google recaptcha][Google-recaptcha] middleware for express.
 
-[express-recaptcha v2][express-recaptcha-v2] (previous middleware version).
+<img src="https://www.google.com/recaptcha/intro/images/hero-recaptcha-demo.gif" width="300px" />
 
 ## Table of contents
 
@@ -41,22 +41,34 @@ npm install express-recaptcha --save
 
 ### How to initialise:
 
+#### For versions >= 4.\*.\*: (New usage)
 ```javascript
-var Recaptcha = require('express-recaptcha').RecaptchaV3;
+var Recaptcha = require('express-recaptcha').RecaptchaV2;
 //import Recaptcha from 'express-recaptcha'
 var recaptcha = new Recaptcha('SITE_KEY', 'SECRET_KEY');
 //or with options
-var options = {'hl':'de'};
+var options = {'theme':'dark'};
 var recaptcha = new Recaptcha('SITE_KEY', 'SECRET_KEY', options);
+```
+
+If you're using the older version of express-recaptcha (`3.\*.\*`), then you should require Recaptcha like so: (everything else is unchanged)
+
+```javascript
+var Recaptcha = require('express-recaptcha');
 ```
 
 #### `options` available/properties:
 | option             | description                                                                                                                                         |
 |--------------------|-----------------------------------------------------------------------------------------------------------------------------------------------------|
 | `onload`           | The callback function that gets called when all the dependencies have loaded.                                                                       |
+| `render`           | Value could be **explicit** OR **onload**, Whether to render the widget explicitly.                                                                 |
 | `hl`               | Forces the widget to render in a specific language (Auto-detects if unspecified).                                                                   |
-| `callback`         | In that callback you will call your backend to verify the given token. To be verified, the token needs to be posted with the key **g-recaptcha-response**  (see the example folder) |
-| `action`           | **homepage** by default should only be alphanumeric [More info on google's web site](Google-recaptcha-action)                                       |
+| `theme`            | Value could be **dark** OR **light**, The color theme of the widget (default light).                                                                |
+| `type`             | Value could be **audio** OR **image**, The type of CAPTCHA to serve.                                                                                |
+| `callback`         | Your callback function that's executed when the user submits a successful CAPTCHA response.                                                         |
+| `expired_callback` | Your callback function that's executed when the recaptcha response expires and the user needs to solve a new CAPTCHA.                               |
+| `size`             | The size of the widget.                                                                                                                             |
+| `tabindex`         | The tabindex of the widget and challenge. If other elements in your page use tabindex, it should be set to make user navigation easier.             |
 | `checkremoteip`    | Adding support of remoteip verification (based on x-forwarded-for header or remoteAddress.Value could be **true** OR **false** (default **false**). |
 
 **For more information, please refer to:**
@@ -64,7 +76,7 @@ var recaptcha = new Recaptcha('SITE_KEY', 'SECRET_KEY', options);
 - [reCaptcha - verify ](https://developers.google.com/recaptcha/docs/verify)
 
 ### Render - `recaptcha.middleware.render`
-The middleware's render method sets the `recaptcha` property of `res` object, with the generated html code. Therefore, you can easily append recaptcha into your templates by passing `res.recaptcha` to the view:
+The middleware's render method sets the `recaptcha` property of `res` object (new in version >= 3.\*.\*, was `req` previously), with the generated html code. Therefore, you can easily append recaptcha into your templates by passing `res.recaptcha` to the view:
 
 ```javascript
 app.get('/', recaptcha.middleware.render, function(req, res){
@@ -75,7 +87,7 @@ app.get('/', recaptcha.middleware.render, function(req, res){
 ### Render - `recaptcha.middleware.renderWith`
 Same as the render middleware method except that you can override the options in parameter :
 ```javascript
-app.get('/', recaptcha.middleware.renderWith({'hl':'fr'}), function(req, res){
+app.get('/', recaptcha.middleware.renderWith({'theme':'dark'}), function(req, res){
   res.render('login', { captcha:res.recaptcha });
 });
 ```
@@ -104,9 +116,7 @@ Here is an example of a `req.recaptcha` response:
 {
   error: string, // error code (see table below), null if success
   data: {
-    hostname: string, // the site's hostname where the reCAPTCHA was solved
-    score: number, // the score for this request (0.0 - 1.0)
-    action: string // the action name for this request (important to verify)
+    hostname: string // the site's hostname where the reCAPTCHA was solved
   }
 }
 ```
@@ -130,9 +140,9 @@ var express = require('express');
 var bodyParser = require('body-parser');
 var pub = __dirname + '/public';
 var app = express();
-var Recaptcha = require('express-recaptcha').RecaptchaV3;
+var Recaptcha = require('express-recaptcha').RecaptchaV2;
 
-var recaptcha = new Recaptcha('SITE_KEY', 'SECRET_KEY',{callback:'cb'});
+var recaptcha = new Recaptcha('SITE_KEY', 'SECRET_KEY');
 
 //- required by express-recaptcha in order to get data from body or query.
 app.use(bodyParser.json());
@@ -167,9 +177,9 @@ var express = require('express');
 var bodyParser = require('body-parser');
 var pub = __dirname + '/public';
 var app = express();
-var Recaptcha = require('express-recaptcha').RecaptchaV3;
+var Recaptcha = require('express-recaptcha').RecaptchaV2;
 
-var recaptcha = new Recaptcha('SITE_KEY', 'SECRET_KEY', {callback:'cb'});
+var recaptcha = new Recaptcha('SITE_KEY', 'SECRET_KEY');
 
 //- required by express-recaptcha in order to get data from body or query.
 app.use(bodyParser.json());
@@ -215,5 +225,3 @@ $ node example\server.js
 [expressjs]: https://github.com/expressjs/express
 [body-parser]: https://github.com/expressjs/body-parser
 [Google-recaptcha]:https://www.google.com/recaptcha
-[express-recaptcha-v2]:Readme.v2.md
-[Google-recaptcha-action]:https://developers.google.com/recaptcha/docs/v3#actions

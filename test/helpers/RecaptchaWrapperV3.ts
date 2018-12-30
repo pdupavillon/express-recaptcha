@@ -1,19 +1,19 @@
-///<reference path="../../src/typings/index.ts" />
+///<reference path="../../src/typings/express-recaptcha.ts" />
 import { expect } from 'chai';
 import { Request, Response } from 'express';
 
-import { Recaptcha } from '../../src';
-import { RecaptchaOptions, RecaptchaResponseData } from '../../src/interfaces';
+import { RecaptchaV3 } from '../../src';
+import { RecaptchaOptionsV3, RecaptchaResponseDataV3 } from '../../src/interfaces';
 
-export class RecaptchaWrapper{
+export class RecaptchaWrapperV3{
   private _isMiddleware:boolean;
-  private _recaptcha:Recaptcha;
-    constructor(isMiddleware:boolean, opt?:RecaptchaOptions){
+  private _recaptcha:RecaptchaV3;
+    constructor(isMiddleware:boolean, opt?:RecaptchaOptionsV3){
       this._isMiddleware = isMiddleware
-      this._recaptcha = new Recaptcha('SITE_KEY', 'SECRET_KEY', opt)
+      this._recaptcha = new RecaptchaV3('SITE_KEY', 'SECRET_KEY', opt)
     }
-    static Init(isMiddleware:boolean, opt?:RecaptchaOptions){
-      return new RecaptchaWrapper(isMiddleware, opt)
+    static Init(isMiddleware:boolean, opt?:RecaptchaOptionsV3){
+      return new RecaptchaWrapperV3(isMiddleware, opt)
     }
     render(){
       if (this._isMiddleware) {
@@ -23,7 +23,7 @@ export class RecaptchaWrapper{
       }
       return this._recaptcha.render()
     }
-    renderWith(opt:RecaptchaOptions){
+    renderWith(opt:RecaptchaOptionsV3){
       if (this._isMiddleware) {
         let res = <Response>{};
         this._recaptcha.middleware.renderWith(opt)(<Request>{}, res,() => {});
@@ -31,13 +31,13 @@ export class RecaptchaWrapper{
       }
       return this._recaptcha.renderWith(opt);
     }
-    verify(req:Request, cb:(error?:string,data?:RecaptchaResponseData)=>void){
+    verify(req:Request, cb:(error?:string,data?:RecaptchaResponseDataV3)=>void){
       if (this._isMiddleware) {
         this._recaptcha.middleware.verify(req,<Response>{}, () => {
           expect(req).to.have.property('recaptcha');
 
           if (req.recaptcha.error === null) {
-            cb(null, req.recaptcha.data)
+            cb(null, <RecaptchaResponseDataV3>req.recaptcha.data)
           } else {
             cb(req.recaptcha.error, null)
           }
