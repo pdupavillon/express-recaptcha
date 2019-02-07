@@ -215,5 +215,5 @@ $ node example\server.js
 [expressjs]: https://github.com/expressjs/express
 [body-parser]: https://github.com/expressjs/body-parser
 [Google-recaptcha]:https://www.google.com/recaptcha
-[express-recaptcha-v2]:Readme.v2.md
+[express-recaptcha-v2]:README.v2.md
 [Google-recaptcha-action]:https://developers.google.com/recaptcha/docs/v3#actions
