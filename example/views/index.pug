@@ -4,17 +4,31 @@ html
   body
     h1 Express-Recaptcha example
     if (captcha)
-        form(method="POST", action="/")
+        form(method="POST", action=post)
             p !{captcha}
             button(type='submit') Verify captcha
             br
-            if (path === '/dark')
-                a(href="/") Light Theme
+            if (path.indexOf('/v3') !== -1)
+                a(href="/") Express Recaptcha V2
             else
-                a(href="/dark") Dark Theme
+                if (path === '/dark')
+                    a(href="/") Light Theme
+                else
+                    a(href="/dark") Dark Theme
+                br
+                a(href="/v3") Express Recaptcha V3
     else
         if (error)
             div(style="color:red") Error : #{error}
         else
             div(style="color:green") Data : #{data}
-        a(href="/") Retry
+        a(href=path) Retry
+    script.
+        function cb(token){
+            console.log('token', token);
+            var input = document.createElement('input');
+            input.setAttribute('type', 'text');
+            input.setAttribute('name', 'g-recaptcha-response');
+            input.setAttribute('value', token);
+            document.getElementsByTagName('form')[0].appendChild(input);
+        }

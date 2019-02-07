@@ -1,6 +1,11 @@
-import { RecaptchaResponseData } from "./RecaptchaResponseData";
+import { RecaptchaResponseDataV2, RecaptchaResponseDataV3 } from "./RecaptchaResponseData";
 
-export interface RecaptchaResponse {
+export interface RecaptchaResponseV2 {
     error?: string,
-    data?: RecaptchaResponseData
+    data?: RecaptchaResponseDataV2
+}
+
+export interface RecaptchaResponseV3 {
+    error?: string,
+    data?: RecaptchaResponseDataV3
 }

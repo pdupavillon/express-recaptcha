@@ -1,9 +1,9 @@
-import { RecaptchaResponse } from '../interfaces';
+import { RecaptchaResponseV2,RecaptchaResponseV3 } from '../interfaces';
 
 declare global {
     namespace Express {
         export interface Request {
-            recaptcha?: RecaptchaResponse;
+            recaptcha?: RecaptchaResponseV2|RecaptchaResponseV3;
         }
         export interface Response {
             recaptcha?: string;
