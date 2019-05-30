@@ -1,0 +1,49 @@
+<html>
+
+<head>
+    <title> Express-Recaptcha example</title>
+</head>
+
+<body>
+    <h1>
+        Express-Recaptcha example
+    </h1>
+    <% if(captcha) {%>
+    <form action="<%=path%>" method="POST">
+        <%- captcha%>
+        <button type='submit'>Verify captcha</button>
+        <br>
+    </form>
+    <% if (path === '/v3') {%>
+    <a href="/">Express Recaptcha V2</a>
+    <%}else{%>
+
+    <% if (path === '/dark') {%>
+    <a href="/">Light Theme</a>
+    <br>
+    <a href="/v3">Express Recaptcha V3</a>
+    <% }else{%>
+    <a href="/dark"> Dark Theme</a>
+    <br>
+    <a href="/v3">Express Recaptcha V3</a>
+    <%}%>
+    <% } } else {%>
+    <% if (error){%>
+    <div style="color:red">Error : <%=error%></div>
+    <% }else{ %>
+    <div style="color:green">Data : <%=data%></div>
+    <a href="<%= path%>">Retry</a>
+    <% }%>
+    <%}%>
+        <script>
+            function cb(token) {
+                console.log('token', token);
+                var input = document.createElement('input');
+                input.setAttribute('type', 'text');
+                input.setAttribute('name', 'g-recaptcha-response');
+                input.setAttribute('value', token);
+                document.getElementsByTagName('form')[0].appendChild(input);
+            }
+        </script>
+    </body>
+</html>
