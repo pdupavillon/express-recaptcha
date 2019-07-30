@@ -91,7 +91,12 @@ export class RecaptchaV3 {
         body += chunk
       });
       res.on('end', () => {
-        const result = JSON.parse(body)
+        let result
+        try {
+          result = JSON.parse(body)
+        } catch (e) {
+          return cb('invalid-json-response', null)
+        }
         const error = result['error-codes'] && result['error-codes'].length > 0 ? result['error-codes'][0] : 'invalid-input-response'
         if (result.success) {
           cb(null, {hostname: result.hostname, score:result.score, action:result.action})
