@@ -75,6 +75,20 @@ describe('Recaptcha v2', () => {
         done()
       })
   }
+  const VerifyErrorWithBadJSONResponse = (done: () => void) => {
+    _httpTestHelper.withBadJSONBody().build();
+
+    RecaptchaWrapperV2.Init(_isMiddleware).verify(
+      <Request>{ body: { 'g-recaptcha-response': '1234578910' } },
+      (error, data) => {
+        expect(data).to.be.null;
+
+        expect(error).to.be.equal('invalid-json-response');
+        _httpTestHelper.checkValidationQueryString('secret=SECRET_KEY&response=1234578910');
+        done();
+      }
+    );
+  }
   const VerifyClientIpHeader = (done:()=>void) => {
       _httpTestHelper.build()
       let req = {
@@ -156,6 +170,7 @@ describe('Recaptcha v2', () => {
     it('Verify in req.query', (done) => Verify(done, 'query'))
     it('Verify in req.params', (done) => Verify(done, 'params'))
     it('Verify with error', (done) => VerifyError(done))
+    it('Verify with bad JSON response', done => VerifyErrorWithBadJSONResponse(done))
     it('Verify client ip - x-forwarded-for header', (done) => VerifyClientIpHeader(done))
     it('Verify client ip - connection remote addr', (done) => VerifyClientIpRemoteAddr(done))
   })
@@ -169,6 +184,7 @@ describe('Recaptcha v2', () => {
     it('Verify in req.query', (done) => Verify(done, 'query'))
     it('Verify in req.params', (done) => Verify(done, 'params'))
     it('Verify with error', (done) => VerifyError(done))
+    it('Verify with bad JSON response', done => VerifyErrorWithBadJSONResponse(done))
     it('Verify client ip - x-forwarded-for header', (done) => VerifyClientIpHeader(done))
     it('Verify client ip - connection remote addr', (done) => VerifyClientIpRemoteAddr(done))
   })

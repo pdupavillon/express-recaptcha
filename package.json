@@ -1,11 +1,11 @@
 {
   "name": "express-recaptcha",
-  "version": "5.0.0",
+  "version": "5.0.1",
   "description": "Google recaptcha middleware for express",
   "main": "./dist/index.js",
   "types": "./dist/index.d.js",
   "scripts": {
-    "dev": "mocha --watch --compilers ts:ts-node/register test/**/*.spec.ts",
+    "test:watch": "mocha --watch --compilers ts:ts-node/register test/**/*.spec.ts",
     "test": "mocha --compilers ts:ts-node/register test/**/*.spec.ts",
     "clean": "rm -rf ./dist",
     "build": "tsc --project src",

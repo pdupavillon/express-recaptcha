@@ -119,7 +119,7 @@ Here is an example of a `req.recaptcha` response:
 | `invalid-input-secret`   | The secret parameter is invalid or malformed.   |
 | `missing-input-response` | The response parameter is missing.              |
 | `invalid-input-response` | The response parameter is invalid or malformed. |
-
+| `invalid-json-response`  | Can't parse google's response. Server error.    |
 
 ## Examples
 
