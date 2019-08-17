@@ -101,7 +101,7 @@ export class RecaptchaV2 {
         let result
         try {
           result = JSON.parse(body)
-        } catch (e) {
+        } catch {
           return cb('invalid-json-response', null)
         }
         const error = result['error-codes'] && result['error-codes'].length > 0 ? result['error-codes'][0] : 'invalid-input-response'

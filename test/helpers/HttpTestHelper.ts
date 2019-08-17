@@ -16,7 +16,11 @@ export class HttpTestHelper {
         this.httpBodyResponse = '{"success":false, "error-codes": [ "' + errorCode + '" ]}';
         return this;
     }
-
+    withBadJSONBody() {
+        this.httpBodyResponse =
+            '<html><body>404 page not found exception</body></html>';
+        return this;
+    }
     build() {
         this._setHttpsStub()
     }
