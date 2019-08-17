@@ -65,7 +65,7 @@ export class RecaptchaV3 {
     if (!req) throw new Error('req is required');
     if(req.body && req.body['g-recaptcha-response']) response = req.body['g-recaptcha-response'];
     if(req.query && req.query['g-recaptcha-response']) response = req.query['g-recaptcha-response'];
-    if(req.params && req.params['g-recaptcha-response']) response = req.params['g-recaptcha-response'];
+    if(req.params && (<any>req.params)['g-recaptcha-response']) response = (<any>req.params)['g-recaptcha-response'];
   
     let query_string = 'secret='+this._secret_key+'&response='+response;
     if (this._options.checkremoteip){
