@@ -35,7 +35,7 @@ export class RecaptchaWrapperV3{
       if (this._isMiddleware) {
         this._recaptcha.middleware.verify(req,<Response>{}, () => {
           expect(req).to.have.property('recaptcha');
-
+          
           if (req.recaptcha.error === null) {
             cb(null, <RecaptchaResponseDataV3>req.recaptcha.data)
           } else {

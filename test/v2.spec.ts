@@ -109,6 +109,20 @@ describe('Recaptcha v2', () => {
         _httpTestHelper.checkValidationQueryString('secret=SECRET_KEY&response=1234578910&remoteip=10.0.0.1')
         done()
       })
+  }
+  const VerifyErrorWithBadRequest = (done: () => void) => {
+    _httpTestHelper.withRequestError().build();
+
+    RecaptchaWrapperV2.Init(_isMiddleware).verify(
+      <Request>{ body: { 'g-recaptcha-response': '1234578910' } },
+      (error, data) => {
+        expect(data).to.be.null;
+
+        expect(error).to.be.equal('google.com dns not found');
+        _httpTestHelper.checkValidationQueryString('secret=SECRET_KEY&response=1234578910');
+        done();
+      }
+    );
   }  
   beforeEach(() => {
     _httpTestHelper = new HttpTestHelper();
@@ -173,6 +187,7 @@ describe('Recaptcha v2', () => {
     it('Verify with bad JSON response', done => VerifyErrorWithBadJSONResponse(done))
     it('Verify client ip - x-forwarded-for header', (done) => VerifyClientIpHeader(done))
     it('Verify client ip - connection remote addr', (done) => VerifyClientIpRemoteAddr(done))
+    it('Verify with request error', (done) => VerifyErrorWithBadRequest(done))
   })
 
   describe('Middleware use', () => {
@@ -187,5 +202,6 @@ describe('Recaptcha v2', () => {
     it('Verify with bad JSON response', done => VerifyErrorWithBadJSONResponse(done))
     it('Verify client ip - x-forwarded-for header', (done) => VerifyClientIpHeader(done))
     it('Verify client ip - connection remote addr', (done) => VerifyClientIpRemoteAddr(done))
+    it('Verify with request error', (done) => VerifyErrorWithBadRequest(done))
   })
 })

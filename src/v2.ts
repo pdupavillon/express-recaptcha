@@ -111,7 +111,8 @@ export class RecaptchaV2 {
         else cb(error, null)
       })
       res.on('error', (e) => { cb(e.message, null); });
-    })
+    });
+    request.on('error', (e) => cb(e.message, null));
     request.write(query_string)
     request.end()
   }

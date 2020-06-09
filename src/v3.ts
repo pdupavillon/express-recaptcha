@@ -105,6 +105,7 @@ export class RecaptchaV3 {
       })
       res.on('error', (e) => { cb(e.message, null); });
     })
+    request.on('error', (e) => cb(e.message, null));
     request.write(query_string)
     request.end()
   }
