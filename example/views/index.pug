@@ -2,22 +2,24 @@ html
   head
     title Express-Recaptcha example
   body
-    h1 Express-Recaptcha example
+    h1 Express-Recaptcha example (PUG template)
     if (captcha)
         form(method="POST", action=post)
             p !{captcha}
             button(type='submit') Verify captcha
-            br
-            if (path.indexOf('/v3') !== -1)
-                a(href="/") Express Recaptcha V2
+        br
+        if (path.indexOf('/pug/v3') !== -1)
+            a(href="/pug") Express Recaptcha V2
+        else
+            if (path === '/pug/dark')
+                a(href="/pug") Light Theme
             else
-                if (path === '/dark')
-                    a(href="/") Light Theme
-                else
-                    a(href="/dark") Dark Theme
-                br
-                a(href="/v3") Express Recaptcha V3
+                a(href="/pug/dark") Dark Theme
             br
+            a(href="/pug/v3") Express Recaptcha V3
+        br
+        a(href="/ejs") EJS Template
+        br
     else
         if (error)
             div(style="color:red") Error : #{error}

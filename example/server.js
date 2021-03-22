@@ -1,5 +1,6 @@
 const express = require('express')
 const bodyParser = require('body-parser')
+const engines = require('consolidate')
 const Recaptcha = require('../dist').RecaptchaV2
 const RecaptchaV3 = require('../dist').RecaptchaV3
 const RECAPTCHA_SITE_KEY_V2 = 'xxxxx'
@@ -18,36 +19,57 @@ app.use(bodyParser.json())
 app.use(bodyParser.urlencoded({ extended: true }))
 
 app.set('views', __dirname + '/views')
+app.engine('pug', engines.pug)
+app.engine('ejs', engines.ejs)
 app.set('view engine', 'pug')
 
-app.get('/', recaptcha.middleware.render, (req, res) => {
-    res.render('index', { post: '/', captcha: res.recaptcha, path: req.path })
+const engineParm = ':engine(pug|ejs)?'
+const getView = (req) => {
+    if (req.params.engine && req.params.engine === 'ejs')
+        return 'index.' + getEngineExt(req)
+    return 'index.' + getEngineExt(req)
+}
+const getEngineExt = (req) => {
+    if (req.params.engine && req.params.engine === 'ejs') return 'ejs'
+    return 'pug'
+}
+
+app.get(`/${engineParm}`, recaptcha.middleware.render, (req, res) => {
+    res.render(getView(req), {
+        post: '/' + getEngineExt(req),
+        captcha: res.recaptcha,
+        path: req.path,
+    })
 })
-app.get('/v3', recaptchaV3.middleware.render, (req, res) => {
-    res.render('index', { post: '/v3', captcha: res.recaptcha, path: req.path })
+app.get(`/${engineParm}/v3`, recaptchaV3.middleware.render, (req, res) => {
+    res.render(getView(req), {
+        post: '/' + getEngineExt(req) + 'v3',
+        captcha: res.recaptcha,
+        path: req.path,
+    })
 })
 app.get(
-    '/dark',
+    `/${engineParm}/dark`,
     recaptcha.middleware.renderWith({ theme: 'dark' }),
     (req, res) => {
-        res.render('index', {
-            post: '/',
+        res.render(getView(req), {
+            post: '/' + getEngineExt(req),
             captcha: res.recaptcha,
             path: req.path,
         })
     }
 )
-app.post('/', recaptcha.middleware.verify, (req, res) => {
-    res.render('index', {
-        post: '/',
+app.post(`/${engineParm}`, recaptcha.middleware.verify, (req, res) => {
+    res.render(getView(req), {
+        post: '/' + getEngineExt(req),
         error: req.recaptcha.error,
         path: req.path,
         data: JSON.stringify(req.recaptcha.data),
     })
 })
-app.post('/v3', recaptchaV3.middleware.verify, (req, res) => {
-    res.render('index', {
-        post: '/v3',
+app.post(`/${engineParm}/v3`, recaptchaV3.middleware.verify, (req, res) => {
+    res.render(getView(req), {
+        post: '/' + getEngineExt(req) + 'v3',
         error: req.recaptcha.error,
         path: req.path,
         data: JSON.stringify(req.recaptcha.data),
