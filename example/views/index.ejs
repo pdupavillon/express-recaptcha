@@ -1,0 +1,44 @@
+<html>
+    <head>
+        <title>Express-Recaptcha example</title>
+    </head>
+    <body>
+        <h1>Express-Recaptcha example (EJS template)</h1>
+        <% if(captcha) {%>
+        <form action="<%=path%>" method="POST">
+            <%- captcha%>
+            <button type="submit">Verify captcha</button>
+            <br />
+        </form>
+        <br />
+        <% if (path === '/v3') {%>
+        <a href="/ejs">Express Recaptcha V2</a>
+        <%}else{%> <% if (path === '/dark') {%>
+        <a href="/ejs">Light Theme</a>
+        <br />
+        <a href="/ejs/v3">Express Recaptcha V3</a>
+        <% }else{%>
+        <a href="/ejs/dark"> Dark Theme</a>
+        <br />
+        <a href="/ejs/v3">Express Recaptcha V3</a>
+        <br />
+        <a href="/pug">PUG Template</a>
+        <br />
+        <%}%> <% } } else {%> <% if (error){%>
+        <div style="color: red">Error : <%=error%></div>
+        <% }else{ %>
+        <div style="color: green">Data : <%=data%></div>
+        <a href="<%= path%>">Retry</a>
+        <% }%> <%}%>
+        <script>
+            function cb(token) {
+                console.log('token', token)
+                var input = document.createElement('input')
+                input.setAttribute('type', 'text')
+                input.setAttribute('name', 'g-recaptcha-response')
+                input.setAttribute('value', token)
+                document.getElementsByTagName('form')[0].appendChild(input)
+            }
+        </script>
+    </body>
+</html>
