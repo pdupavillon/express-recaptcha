@@ -6,6 +6,7 @@ import { HostName, HttpTestHelper } from './helpers/HttpTestHelper';
 import { RecaptchaWrapperV3 } from './helpers/RecaptchaWrapperV3';
 
 const API_URL = 'www.google.com/recaptcha/api.js'
+const ALTERNATE_API_URL = 'www.recaptcha.net/recaptcha/api.js'
 
 describe('Recaptcha v3', () => {
   let _httpTestHelper:HttpTestHelper;
@@ -157,6 +158,20 @@ describe('Recaptcha v3', () => {
       callback:'callback',
       checkremoteip:true
     });
+  })
+
+  it('Init with alternate host', () => {
+    let recaptcha = new RecaptchaV3('SITE_KEY','SECRET_KEY', {callback:'cb'}, 'www.recaptcha.net')
+    expect(recaptcha).to.be.instanceof(RecaptchaV3);
+    expect(recaptcha).to.have.property('_custom_host').equal('www.recaptcha.net');
+  })
+
+  it('Render with alternate host', () => {
+    let recaptcha = new RecaptchaV3('SITE_KEY','SECRET_KEY', {callback:'cb'}, 'www.recaptcha.net')
+    const result = recaptcha.render();
+    const expected = '<script src="//'+ALTERNATE_API_URL+'?render=SITE_KEY"></script>'+
+    '<script>grecaptcha.ready(function(){grecaptcha.execute(\'SITE_KEY\', {action: \'homepage\'}).then(cb);});</script>';
+    expect(result).to.equal(expected)
   })
 
   it('Not init', () => {

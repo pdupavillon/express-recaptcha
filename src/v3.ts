@@ -13,13 +13,16 @@ export class RecaptchaV3 {
   private _site_key:string;
   private _secret_key:string;
   private _options:RecaptchaOptionsV3;
+  private _custom_host:string;
 
-  constructor(site_key:string, secret_key:string, options?:RecaptchaOptionsV3){
+  constructor(site_key:string, secret_key:string, options?:RecaptchaOptionsV3, custom_host?:string){
     this._site_key = site_key
     this._secret_key = secret_key
     this._options = options || {checkremoteip:false}
+    this._custom_host = custom_host
     if (!this._site_key) throw new Error('site_key is required')
     if (!this._secret_key) throw new Error('secret_key is required')
+    if (this._custom_host) this._api.host = this._custom_host
   }
   get middleware():RecaptchaMiddleware {
     return {
