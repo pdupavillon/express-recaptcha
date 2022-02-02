@@ -6,6 +6,7 @@ import { HostName, HttpTestHelper } from './helpers/HttpTestHelper';
 import { RecaptchaWrapperV2 } from './helpers/RecaptchaWrapperV2';
 
 const API_URL = 'www.google.com/recaptcha/api.js'
+const ALTERNATE_API_URL = 'www.recaptcha.net/recaptcha/api.js'
 
 describe('Recaptcha v2', () => {
   let _httpTestHelper:HttpTestHelper;
@@ -168,6 +169,20 @@ describe('Recaptcha v2', () => {
       tabindex:'tabindex',
       checkremoteip:true
     });
+  })
+
+  it('Init with alternate host', () => {
+    let recaptcha = new RecaptchaV2('SITE_KEY','SECRET_KEY', {}, 'www.recaptcha.net')
+    expect(recaptcha).to.be.instanceof(RecaptchaV2);
+    expect(recaptcha).to.have.property('_custom_host').equal('www.recaptcha.net');
+  })
+
+  it('Render with alternate host', () => {
+    let recaptcha = new RecaptchaV2('SITE_KEY','SECRET_KEY', {}, 'www.recaptcha.net')
+    const result = recaptcha.render();
+    const expected = '<script src="//'+ALTERNATE_API_URL+'" async defer></script>'+
+    '<div class="g-recaptcha" data-sitekey="SITE_KEY"></div>'
+    expect(result).to.equal(expected)
   })
 
   it('Not init', () => {
