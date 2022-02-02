@@ -65,6 +65,15 @@ var recaptcha = new Recaptcha('SITE_KEY', 'SECRET_KEY', options)
 -   [reCaptcha - display](https://developers.google.com/recaptcha/docs/display#config)
 -   [reCaptcha - verify ](https://developers.google.com/recaptcha/docs/verify)
 
+#### Alternate host
+
+To provide an alternate host from which to serve reCaptcha assets (such as `api.js`), use the `CUSTOM_HOST` option:
+```
+var recaptcha = new Recaptcha('SITE_KEY', 'SECRET_KEY', options, 'CUSTOM_HOST')
+```
+
+This is useful in instances such as where `www.google.com` may be blocked and `www.recaptcha.net` could be used as the host instead (as detailed here https://developers.google.com/recaptcha/docs/faq#can-i-use-recaptcha-globally)
+
 ### Render - `recaptcha.middleware.render`
 
 The middleware's render method sets the `recaptcha` property of `res` object, with the generated html code. Therefore, you can easily append recaptcha into your templates by passing `res.recaptcha` to the view:
