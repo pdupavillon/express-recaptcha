@@ -172,14 +172,14 @@ describe('Recaptcha v2', () => {
   })
 
   it('Init with alternate host', () => {
-    let recaptcha = new RecaptchaV2('SITE_KEY','SECRET_KEY', {useRecaptchaDomain: true})
+    let recaptcha = new RecaptchaV2('SITE_KEY','SECRET_KEY',{useRecaptchaDomain:true})
     expect(recaptcha).to.be.instanceof(RecaptchaV2);
     expect(recaptcha).to.have.property('_options').that.have.property('useRecaptchaDomain').that.is.true;
 
   })
 
   it('Render with alternate host', () => {
-    let recaptcha = new RecaptchaV2('SITE_KEY','SECRET_KEY', {useRecaptchaDomain: true})
+    let recaptcha = new RecaptchaV2('SITE_KEY','SECRET_KEY',{useRecaptchaDomain:true})
     const result = recaptcha.render();
     const expected = '<script src="//'+ALTERNATE_API_URL+'" async defer></script>'+
     '<div class="g-recaptcha" data-sitekey="SITE_KEY"></div>'
