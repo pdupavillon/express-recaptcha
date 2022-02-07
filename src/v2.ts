@@ -7,22 +7,23 @@ import { RecaptchaMiddleware, RecaptchaOptionsV2, RecaptchaResponseDataV2, Recap
 export class RecaptchaV2 {
   private _api = {
     host:'www.google.com',
+    alt_host:'www.recaptcha.net',
     script:'/recaptcha/api.js',
     verify:'/recaptcha/api/siteverify'
   };
   private _site_key:string;
   private _secret_key:string;
   private _options:RecaptchaOptionsV2;
-  private _custom_host:string;
+  private _alternate_host:boolean;
 
-  constructor(site_key:string, secret_key:string, options?:RecaptchaOptionsV2, custom_host?:string){
+  constructor(site_key:string, secret_key:string, options?:RecaptchaOptionsV2, alternate_host?:boolean){
     this._site_key = site_key
     this._secret_key = secret_key
     this._options = options || {checkremoteip:false}
-    this._custom_host = custom_host
+    this._alternate_host = alternate_host || false
     if (!this._site_key) throw new Error('site_key is required')
     if (!this._secret_key) throw new Error('secret_key is required')
-    if (this._custom_host) this._api.host = this._custom_host
+    if (this._alternate_host) this._api.host = this._api.alt_host
   }
   get middleware():RecaptchaMiddleware {
     return {

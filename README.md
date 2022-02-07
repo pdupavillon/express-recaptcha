@@ -67,12 +67,12 @@ var recaptcha = new Recaptcha('SITE_KEY', 'SECRET_KEY', options)
 
 #### Alternate host
 
-To provide an alternate host from which to serve reCaptcha assets (such as `api.js`), use the `CUSTOM_HOST` option:
+To use the alternate host `www.recaptcha.net` from which to serve reCaptcha assets (such as `api.js`), set the `alternate_host` argument to `true`:
 ```
-var recaptcha = new Recaptcha('SITE_KEY', 'SECRET_KEY', options, 'CUSTOM_HOST')
+var recaptcha = new Recaptcha('SITE_KEY', 'SECRET_KEY', options, true)
 ```
 
-This is useful in instances such as where `www.google.com` may be blocked and `www.recaptcha.net` could be used as the host instead (as detailed here https://developers.google.com/recaptcha/docs/faq#can-i-use-recaptcha-globally)
+This is useful in instances where `www.google.com` may be blocked (as detailed here https://developers.google.com/recaptcha/docs/faq#can-i-use-recaptcha-globally)
 
 ### Render - `recaptcha.middleware.render`
 

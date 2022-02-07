@@ -161,13 +161,13 @@ describe('Recaptcha v3', () => {
   })
 
   it('Init with alternate host', () => {
-    let recaptcha = new RecaptchaV3('SITE_KEY','SECRET_KEY', {callback:'cb'}, 'www.recaptcha.net')
+    let recaptcha = new RecaptchaV3('SITE_KEY','SECRET_KEY', {callback:'cb'}, true)
     expect(recaptcha).to.be.instanceof(RecaptchaV3);
-    expect(recaptcha).to.have.property('_custom_host').equal('www.recaptcha.net');
+    expect(recaptcha).to.have.property('_alternate_host').equal(true);
   })
 
   it('Render with alternate host', () => {
-    let recaptcha = new RecaptchaV3('SITE_KEY','SECRET_KEY', {callback:'cb'}, 'www.recaptcha.net')
+    let recaptcha = new RecaptchaV3('SITE_KEY','SECRET_KEY', {callback:'cb'}, true)
     const result = recaptcha.render();
     const expected = '<script src="//'+ALTERNATE_API_URL+'?render=SITE_KEY"></script>'+
     '<script>grecaptcha.ready(function(){grecaptcha.execute(\'SITE_KEY\', {action: \'homepage\'}).then(cb);});</script>';
