@@ -14,16 +14,13 @@ export class RecaptchaV3 {
   private _site_key:string;
   private _secret_key:string;
   private _options:RecaptchaOptionsV3;
-  private _alternate_host:boolean;
 
-  constructor(site_key:string, secret_key:string, options?:RecaptchaOptionsV3, alternate_host?:boolean){
+  constructor(site_key:string, secret_key:string, options?:RecaptchaOptionsV3){
     this._site_key = site_key
     this._secret_key = secret_key
     this._options = options || {checkremoteip:false}
-    this._alternate_host = alternate_host || false
     if (!this._site_key) throw new Error('site_key is required')
     if (!this._secret_key) throw new Error('secret_key is required')
-    if (this._alternate_host) this._api.host = this._api.alt_host
   }
   get middleware():RecaptchaMiddleware {
     return {
@@ -50,21 +47,26 @@ export class RecaptchaV3 {
     return this.renderWith({});
   }
   renderWith(optionsToOverride:RecaptchaOptionsV3){
+    let recaptcha_host = this._api.host
     let query_string = '&render='+this._site_key;
     let options = (<any>Object).assign({action:'homepage', callback:''},this._options, optionsToOverride);
     
+    if (options.useRecaptchaDomain) recaptcha_host = this._api.alt_host
     if (!options.action) throw new Error('action is required')
     if (!options.callback) throw new Error('callback is required')
     if (options.onload) query_string += '&onload='+options.onload
     if (options.hl) query_string += '&hl='+options.hl
 
     query_string = query_string.replace(/^&/,'?')
-    return  '<script src="//'+this._api.host+this._api.script+query_string+'"></script>'+
+    return  '<script src="//'+recaptcha_host+this._api.script+query_string+'"></script>'+
             '<script>grecaptcha.ready(function(){grecaptcha.execute(\''+this._site_key+'\', {action: \''+options.action+'\'}).then('+options.callback+');});</script>';
   }
   verify(req:Request, cb:(error?:string|null,data?:RecaptchaResponseDataV3|null)=>void){
     let response = null;
     let post_options = null;
+    let recaptcha_host = this._api.host
+
+    if (this._options.useRecaptchaDomain) recaptcha_host = this._api.alt_host
 
     if (!req) throw new Error('req is required');
     if(req.body && req.body['g-recaptcha-response']) response = req.body['g-recaptcha-response'];
@@ -77,7 +79,7 @@ export class RecaptchaV3 {
       if (remote_ip) query_string += '&remoteip=' + remote_ip
     }
     post_options = {
-      host: this._api.host,
+      host: recaptcha_host,
       port: '443',
       path: this._api.verify,
       method: 'POST',

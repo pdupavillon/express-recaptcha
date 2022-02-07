@@ -9,6 +9,7 @@ export interface RecaptchaOptionsV2 {
     expired_callback?: string;
     size?: string;
     tabindex?: string;
+    useRecaptchaDomain?: boolean;
 }
 export interface RecaptchaOptionsV3 {
     onload?: string;
@@ -16,4 +17,5 @@ export interface RecaptchaOptionsV3 {
     hl?: string;
     callback?: string;
     action?:string;
+    useRecaptchaDomain?: boolean;
 }
