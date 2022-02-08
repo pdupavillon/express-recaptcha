@@ -43,7 +43,7 @@ app.get(`/${engineParm}`, recaptcha.middleware.render, (req, res) => {
 })
 app.get(`/${engineParm}/v3`, recaptchaV3.middleware.render, (req, res) => {
     res.render(getView(req), {
-        post: '/' + getEngineExt(req) + 'v3',
+        post: '/' + getEngineExt(req) + '/v3',
         captcha: res.recaptcha,
         path: req.path,
     })
@@ -69,7 +69,7 @@ app.post(`/${engineParm}`, recaptcha.middleware.verify, (req, res) => {
 })
 app.post(`/${engineParm}/v3`, recaptchaV3.middleware.verify, (req, res) => {
     res.render(getView(req), {
-        post: '/' + getEngineExt(req) + 'v3',
+        post: '/' + getEngineExt(req) + '/v3',
         error: req.recaptcha.error,
         path: req.path,
         data: JSON.stringify(req.recaptcha.data),
