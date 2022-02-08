@@ -52,13 +52,14 @@ var recaptcha = new Recaptcha('SITE_KEY', 'SECRET_KEY', options)
 
 #### `options` available/properties:
 
-| option          | description                                                                                                                                                                        |
-| --------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `onload`        | The callback function that gets called when all the dependencies have loaded.                                                                                                      |
-| `hl`            | Forces the widget to render in a specific language (Auto-detects if unspecified).                                                                                                  |
-| `callback`      | In that callback you will call your backend to verify the given token. To be verified, the token needs to be posted with the key **g-recaptcha-response** (see the example folder) |
-| `action`        | **homepage** by default should only be alphanumeric [More info on google's web site](Google-recaptcha-action)                                                                      |
-| `checkremoteip` | Adding support of remoteip verification (based on x-forwarded-for header or remoteAddress.Value could be **true** OR **false** (default **false**).                                |
+| option               | description                                                                                                                                                                                                                   |
+|----------------------|-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| `onload`             | The callback function that gets called when all the dependencies have loaded.                                                                                                                                                 |
+| `hl`                 | Forces the widget to render in a specific language (Auto-detects if unspecified).                                                                                                                                             |
+| `callback`           | In that callback you will call your backend to verify the given token. To be verified, the token needs to be posted with the key **g-recaptcha-response** (see the example folder)                                            |
+| `action`             | **homepage** by default should only be alphanumeric [More info on google's web site](Google-recaptcha-action)                                                                                                                 |
+| `checkremoteip`      | Adding support of remoteip verification (based on x-forwarded-for header or remoteAddress.Value could be **true** OR **false** (default **false**).                                                                           |
+| `useRecaptchaDomain` | Boolean. Sets `www.recaptcha.net` as the host; useful in instances where `www.google.com` may be blocked (as detailed in the [reCaptcha docs](https://developers.google.com/recaptcha/docs/faq#can-i-use-recaptcha-globally)) |
 
 **For more information, please refer to:**
 

@@ -7,6 +7,7 @@ import { RecaptchaMiddleware, RecaptchaOptionsV2, RecaptchaResponseDataV2, Recap
 export class RecaptchaV2 {
   private _api = {
     host:'www.google.com',
+    alt_host:'www.recaptcha.net',
     script:'/recaptcha/api.js',
     verify:'/recaptcha/api/siteverify'
   };
@@ -46,11 +47,13 @@ export class RecaptchaV2 {
     return this.renderWith({});
   }
   renderWith(optionsToOverride:RecaptchaOptionsV2){
+    let recaptcha_host = this._api.host
     let query_string = ''
     let captcha_attr = ''
 
     let options = (<any>Object).assign({},this._options, optionsToOverride);
 
+    if (options.useRecaptchaDomain) recaptcha_host = this._api.alt_host
     if (options.onload) query_string += '&onload='+options.onload
     if (options.render) query_string += '&render='+options.render
     if (options.hl) query_string += '&hl='+options.hl
@@ -62,12 +65,15 @@ export class RecaptchaV2 {
     if (options.tabindex) captcha_attr += ' data-tabindex="'+options.tabindex+'"'
   
     query_string = query_string.replace(/^&/,'?')
-    return  '<script src="//'+this._api.host+this._api.script+query_string+'" async defer></script>'+
+    return  '<script src="//'+recaptcha_host+this._api.script+query_string+'" async defer></script>'+
             '<div class="g-recaptcha" data-sitekey="'+this._site_key+'"'+captcha_attr+'></div>'
   }
   verify(req:Request, cb:(error?:string|null,data?:RecaptchaResponseDataV2|null)=>void){
     let response = null;
     let post_options = null;
+    let recaptcha_host = this._api.host
+
+    if (this._options.useRecaptchaDomain) recaptcha_host = this._api.alt_host
 
     if (!req) throw new Error('req is required');
     if(req.body && req.body['g-recaptcha-response']) response = req.body['g-recaptcha-response'];
@@ -80,7 +86,7 @@ export class RecaptchaV2 {
       if (remote_ip) query_string += '&remoteip=' + remote_ip
     }
     post_options = {
-      host: this._api.host,
+      host: recaptcha_host,
       port: '443',
       path: this._api.verify,
       method: 'POST',

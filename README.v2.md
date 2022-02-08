@@ -60,18 +60,19 @@ var Recaptcha = require('express-recaptcha')
 
 #### `options` available/properties:
 
-| option             | description                                                                                                                                         |
-| ------------------ | --------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `onload`           | The callback function that gets called when all the dependencies have loaded.                                                                       |
-| `render`           | Value could be **explicit** OR **onload**, Whether to render the widget explicitly.                                                                 |
-| `hl`               | Forces the widget to render in a specific language (Auto-detects if unspecified).                                                                   |
-| `theme`            | Value could be **dark** OR **light**, The color theme of the widget (default light).                                                                |
-| `type`             | Value could be **audio** OR **image**, The type of CAPTCHA to serve.                                                                                |
-| `callback`         | Your callback function that's executed when the user submits a successful CAPTCHA response.                                                         |
-| `expired_callback` | Your callback function that's executed when the recaptcha response expires and the user needs to solve a new CAPTCHA.                               |
-| `size`             | The size of the widget.                                                                                                                             |
-| `tabindex`         | The tabindex of the widget and challenge. If other elements in your page use tabindex, it should be set to make user navigation easier.             |
-| `checkremoteip`    | Adding support of remoteip verification (based on x-forwarded-for header or remoteAddress.Value could be **true** OR **false** (default **false**). |
+| option               | description                                                                                                                                                                                                                   |
+|----------------------|-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| `onload`             | The callback function that gets called when all the dependencies have loaded.                                                                                                                                                 |
+| `render`             | Value could be **explicit** OR **onload**, Whether to render the widget explicitly.                                                                                                                                           |
+| `hl`                 | Forces the widget to render in a specific language (Auto-detects if unspecified).                                                                                                                                             |
+| `theme`              | Value could be **dark** OR **light**, The color theme of the widget (default light).                                                                                                                                          |
+| `type`               | Value could be **audio** OR **image**, The type of CAPTCHA to serve.                                                                                                                                                          |
+| `callback`           | Your callback function that's executed when the user submits a successful CAPTCHA response.                                                                                                                                   |
+| `expired_callback`   | Your callback function that's executed when the recaptcha response expires and the user needs to solve a new CAPTCHA.                                                                                                         |
+| `size`               | The size of the widget.                                                                                                                                                                                                       |
+| `tabindex`           | The tabindex of the widget and challenge. If other elements in your page use tabindex, it should be set to make user navigation easier.                                                                                       |
+| `checkremoteip`      | Adding support of remoteip verification (based on x-forwarded-for header or remoteAddress.Value could be **true** OR **false** (default **false**).                                                                           |
+| `useRecaptchaDomain` | Boolean. Sets `www.recaptcha.net` as the host; useful in instances where `www.google.com` may be blocked (as detailed in the [reCaptcha docs](https://developers.google.com/recaptcha/docs/faq#can-i-use-recaptcha-globally)) |
 
 **For more information, please refer to:**
 
