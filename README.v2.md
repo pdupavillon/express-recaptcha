@@ -61,7 +61,7 @@ var Recaptcha = require('express-recaptcha')
 #### `options` available/properties:
 
 | option               | description                                                                                                                                                                                                                   |
-|----------------------|-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| -------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | `onload`             | The callback function that gets called when all the dependencies have loaded.                                                                                                                                                 |
 | `render`             | Value could be **explicit** OR **onload**, Whether to render the widget explicitly.                                                                                                                                           |
 | `hl`                 | Forces the widget to render in a specific language (Auto-detects if unspecified).                                                                                                                                             |
@@ -232,10 +232,10 @@ Run the example folder for a live demo:
 $ node example\server.js
 ```
 
-[ci-image]: https://travis-ci.org/pdupavillon/express-recaptcha.svg?branch=master
-[ci-url]: https://travis-ci.org/pdupavillon/express-recaptcha
+[ci-image]: https://github.com/pdupavillon/express-recaptcha/actions/workflows/ci.yml/badge.svg
+[ci-url]: https://github.com/pdupavillon/express-recaptcha/actions/workflows/ci.yml
 [npm-version-image]: https://badge.fury.io/js/express-recaptcha.svg
-[npm-version-url]: http://badge.fury.io/js/express-recaptcha
+[npm-version-url]: https://badge.fury.io/js/express-recaptcha
 [expressjs]: https://github.com/expressjs/express
 [body-parser]: https://github.com/expressjs/body-parser
 [google-recaptcha]: https://www.google.com/recaptcha
